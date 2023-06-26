@@ -1,0 +1,51 @@
+# Flutter/Dart specific
+**/build/
+**/ios/Flutter/
+**/android/build/
+**/android/Flutter/
+.dart_tool/
+.idea/
+.vscode/
+*.iml
+
+# Android specific
+**/android/key.properties
+**/android/app/debug.keystore
+
+# iOS specific
+**/ios/Pods/
+**/ios/Flutter/App.framework/
+**/ios/Flutter/Flutter.framework/
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Flutter/flutter_project.pbxproj
+**/ios/Flutter/flutter_runner.xcodeproj/
+**/ios/Flutter/flutter_assets/
+
+# Gradle files
+**/android/gradle.properties
+**/android/local.properties
+**/android/gradlew
+**/android/gradlew.bat
+
+# Xcode files
+**/ios/*.pbxproj
+**/ios/*.mode1v3
+**/ios/*.mode2v3
+**/ios/*.xcworkspace/
+**/ios/*.xcuserstate
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# Build generated files
+**/lib/generated/
+
+# Generated files
+**/pubspec.lock
+**/pubspec.yaml.rej
+**/pubspec.yaml.orig
+
+# Miscellaneous
+**/*.zip
+**/*.tar.gz
+**/*.iml
+**/*.log
