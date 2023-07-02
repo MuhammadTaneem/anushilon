@@ -1,36 +1,34 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppbarComponent } from './layout/appbar/appbar.component';
+import { FooterComponent } from './layout/footer/footer.component';
 import {AuthModule} from "./auth/auth.module";
-import {MaterialModule} from "./material/material.module";
+import {McqModule} from "./mcq/mcq.module";
+import { AppRoutingModule } from './app-routing.module';
 import {HttpClientModule} from "@angular/common/http";
-import {HomepageComponent} from "./dashboard/homepage/homepage.component";
-import {DashboardComponent} from "./dashboard/dashboard.component";
-import {FooterComponent} from "./dashboard/footer/footer.component";
-import {AppbarComponent} from "./dashboard/appbar/appbar.component";
-
+import {MaterialModule} from "./material/material.module";
+import { LayoutComponent } from './layout/layout.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomepageComponent,
-    DashboardComponent,
+    AppbarComponent,
     FooterComponent,
-    AppbarComponent
+    LayoutComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
-    MaterialModule,
     AuthModule,
+    McqModule,
+    AppRoutingModule,
     HttpClientModule,
-
-
-
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]

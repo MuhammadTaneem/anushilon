@@ -1,53 +1,48 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {HomepageComponent} from "./dashboard/homepage/homepage.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
-import {McqComponent} from "./mcq/mcq.component";
-import {ExamComponent} from "./exam/exam.component";
-import {OfferComponent} from "./offer/offer.component";
-import {PackageComponent} from "./package/package.component";
+import {LayoutComponent} from "./layout/layout.component";
 
 const routes: Routes = [
   {
     path: '',
     // pathMatch: 'full',
-    component: DashboardComponent,
+    component: LayoutComponent,
     children: [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'homepage',
+        redirectTo: 'offer',
       },
       {
-        path: 'homepage',
-        component: HomepageComponent,
-
+        path: 'dashboard',
+        component:DashboardComponent,
+        // loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule ),
       },
       {
         path: 'mcq',
-        component: McqComponent,
+        loadChildren: () => import('./mcq/mcq.module').then((m) => m.McqModule ),
       },
-      {
-        path: 'exam',
-        component: ExamComponent,
-      },
-      {
-        path: 'offer',
-        component: OfferComponent,
-      },
-      {
-        path: 'package',
-        component: PackageComponent,
-      },
+      // {
+      //   path: 'exam',
+      //   component: ExamComponent,
+      // },
+      // {
+      //   path: 'offer',
+      //   component: OfferComponent,
+      // },
+      // {
+      //   path: 'package',
+      //   component: PackageComponent,
+      // },
     ]
   },
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
-    outlet: 'main'
+    // outlet: 'main'
 
   },
-
 
   // {path: '**', redirectTo: 'dashboard'}
 ];

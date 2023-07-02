@@ -7,7 +7,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
 import {MatToolbarModule} from "@angular/material/toolbar";
-
+import {MatTableModule} from '@angular/material/table';
+import {ReactiveFormsModule} from "@angular/forms";
 
 let module_list=[
   CommonModule,
@@ -17,8 +18,10 @@ let module_list=[
   MatIconModule,
   MatDividerModule,
   MatButtonModule,
-  MatToolbarModule
-  ];
+  MatToolbarModule,
+  MatTableModule,
+  ReactiveFormsModule
+];
 
 @NgModule({
   declarations: [],

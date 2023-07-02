@@ -3,17 +3,17 @@ import { CommonModule } from '@angular/common';
 
 import { McqRoutingModule } from './mcq-routing.module';
 import { McqComponent } from './mcq.component';
-import { McqAddComponent } from './mcq-add/mcq-add.component';
+import {MaterialModule} from "../material/material.module";
 
 
 @NgModule({
   declarations: [
-    McqComponent,
-    McqAddComponent
+    McqComponent
   ],
   imports: [
     CommonModule,
-    McqRoutingModule
+    McqRoutingModule,
+    MaterialModule
   ]
 })
 export class McqModule { }
