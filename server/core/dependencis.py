@@ -77,7 +77,6 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 
     try:
         session = SessionManager.create_session()
-
         user = session.query(Admin).filter(Admin.email == email).first()
         session.close()
     except Exception as e:

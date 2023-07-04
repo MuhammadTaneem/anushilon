@@ -8,6 +8,7 @@ class Header:
 class Admin(BaseModel):
     full_name: str
     email: str
+    role: str
 
     class Config:
         orm_mode = True

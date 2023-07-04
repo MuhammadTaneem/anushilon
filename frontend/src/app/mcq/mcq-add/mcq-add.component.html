@@ -1,11 +1,245 @@
-<div class="container-fluid --bs-white" >
+<div class="container-fluid --bs-white">
   <div class="row">
+    <div class="col-9">
+      <button mat-icon-button [routerLink]="['/mcq']">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </div>
 
+    <div class="col-3 p-2">
+      <button mat-raised-button color="primary" (click)="uploadExel.click()"> <mat-icon>grid_on</mat-icon>Upload Excel</button>
+      <input #uploadExel  class="d-none" type="file" (change)="onExcelUpload($event)" accept=".xlsx, .xls">
 
-
-    <button mat-icon-button [routerLink]="['/mcq']">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-
+    </div>
   </div>
+
 </div>
+
+
+<!--=======================-->
+<div class="container-fluid">
+  <form [formGroup]="mcqForm" (ngSubmit)="onSubmit()" class="form">
+
+<!--    question-->
+
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="full-width">
+          <mat-label>Question</mat-label>
+          <input matInput type="text" formControlName="question">
+          <mat-error *ngIf="mcqForm.controls.question.invalid && (mcqForm.controls.question.dirty || mcqForm.controls.question.touched)">
+            <div *ngIf="mcqForm.controls.question.errors?.['required']">Question is required.</div>
+          </mat-error>
+          <button matSuffix type="button"  *ngIf="!questionImagePreviewUrl" mat-icon-button color="primary" (click)="qImageInput.click()"> <mat-icon>image</mat-icon></button>
+          <button matSuffix type="button" *ngIf="questionImagePreviewUrl" mat-icon-button color="primary" (click)="cancelImage('question')"> <mat-icon>close</mat-icon></button>
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-md-3" *ngIf="questionImagePreviewUrl">
+        <img  [src]="questionImagePreviewUrl" alt="Image Preview" [style.height.px]=100  class="full-width">
+      </div>
+      <input #qImageInput type="file" formControlName="question_img" class="d-none" (change)="onImageChange('question', $event)" accept="image/*">
+    </div>
+
+
+<!--    options-->
+
+
+    <div class="row">
+
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>option Text 1</mat-label>
+            <input matInput type="text" formControlName="option_text_1">
+            <mat-error *ngIf="mcqForm.controls.option_text_1.invalid && (mcqForm.controls.option_text_1.dirty || mcqForm.controls.option_text_1.touched)">
+              <div *ngIf="mcqForm.controls.option_text_1.errors?.['required']">Option1 is required.</div>
+            </mat-error>
+
+            <button matSuffix  type="button" *ngIf="!optionOneImagePreviewUrl" mat-icon-button color="primary" (click)="optionOneImageInput.click()"> <mat-icon>image</mat-icon></button>
+            <button matSuffix type="button" *ngIf="optionOneImagePreviewUrl" mat-icon-button color="primary" (click)="cancelImage('option_1')"> <mat-icon>close</mat-icon></button>
+          </mat-form-field>
+        </div>
+        <input #optionOneImageInput type="file" formControlName="option_img_1" class="d-none" (change)="onImageChange('option_1', $event)" accept="image/*">
+
+        <div class="col"  *ngIf="optionOneImagePreviewUrl">
+          <img  [src]="optionOneImagePreviewUrl" alt="Image Preview" [style.height.px]=50  class="full-width">
+        </div>
+
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>option Text 2</mat-label>
+            <input matInput type="text" formControlName="option_text_2">
+            <mat-error *ngIf="mcqForm.controls.option_text_2.invalid && (mcqForm.controls.option_text_2.dirty || mcqForm.controls.option_text_2.touched)">
+              <div *ngIf="mcqForm.controls.option_text_2.errors?.['required']">Option 2 is required.</div>
+            </mat-error>
+
+            <button matSuffix type="button"  *ngIf="!optionTwoImagePreviewUrl" mat-icon-button color="primary" (click)="optionTwoImageInput.click()"> <mat-icon>image</mat-icon></button>
+            <button matSuffix type="button" *ngIf="optionTwoImagePreviewUrl" mat-icon-button color="primary" (click)="cancelImage('option_2')"> <mat-icon>close</mat-icon></button>
+          </mat-form-field>
+        </div>
+        <input #optionTwoImageInput type="file" formControlName="option_img_2" class="d-none" (change)="onImageChange('option_2', $event)" accept="image/*">
+
+        <div class="col"  *ngIf="optionTwoImagePreviewUrl">
+          <img  [src]="optionTwoImagePreviewUrl" alt="Image Preview" [style.height.px]=50  class="full-width">
+        </div>
+
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>option Text 3</mat-label>
+            <input matInput type="text" formControlName="option_text_3">
+            <mat-error *ngIf="mcqForm.controls.option_text_3.invalid && (mcqForm.controls.option_text_3.dirty || mcqForm.controls.option_text_3.touched)">
+              <div *ngIf="mcqForm.controls.option_text_3.errors?.['required']">Option 3 is required.</div>
+            </mat-error>
+
+            <button matSuffix  type="button" *ngIf="!optionThreeImagePreviewUrl" mat-icon-button color="primary" (click)="optionThreeImageInput.click()"> <mat-icon>image</mat-icon></button>
+            <button matSuffix type="button" *ngIf="optionThreeImagePreviewUrl" mat-icon-button color="primary" (click)="cancelImage('option_3')"> <mat-icon>close</mat-icon></button>
+          </mat-form-field>
+        </div>
+        <input #optionThreeImageInput type="file" formControlName="option_img_3" class="d-none" (change)="onImageChange('option_3', $event)" accept="image/*">
+
+        <div class="col"  *ngIf="optionThreeImagePreviewUrl">
+          <img  [src]="optionThreeImagePreviewUrl" alt="Image Preview" [style.height.px]=50  class="full-width">
+        </div>
+
+      </div>
+
+
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>option Text 4</mat-label>
+            <input matInput type="text" formControlName="option_text_4">
+            <mat-error *ngIf="mcqForm.controls.option_text_4.invalid && (mcqForm.controls.option_text_4.dirty || mcqForm.controls.option_text_4.touched)">
+              <div *ngIf="mcqForm.controls.option_text_4.errors?.['required']">Option 4 is required.</div>
+            </mat-error>
+
+            <button matSuffix type="button" *ngIf="!optionFourImagePreviewUrl" mat-icon-button color="primary" (click)="optionFourImageInput.click()"> <mat-icon>image</mat-icon></button>
+            <button matSuffix type="button" *ngIf="optionFourImagePreviewUrl" mat-icon-button color="primary" (click)="cancelImage('option_4')"> <mat-icon>close</mat-icon></button>
+          </mat-form-field>
+        </div>
+        <input #optionFourImageInput type="file" formControlName="option_img_4" class="d-none" (change)="onImageChange('option_4', $event)" accept="image/*">
+
+        <div class="col"  *ngIf="optionFourImagePreviewUrl">
+          <img  [src]="optionFourImagePreviewUrl" alt="Image Preview" [style.height.px]=50  class="full-width">
+        </div>
+
+      </div>
+
+
+
+
+    </div>
+  </form>
+</div>
+
+
+<!--<div class="row">-->
+<!--  <div class="row ">-->
+<!--    <div class="col-sm-12 col-md-6">-->
+<!--      <form [formGroup]="mcqForm" (ngSubmit)="onSubmit()" class="form">-->
+<!--        &lt;!&ndash; Question Field &ndash;&gt;-->
+
+
+<!--        &lt;!&ndash; Question Image Field &ndash;&gt;-->
+<!--        &lt;!&ndash;          <div class="row">&ndash;&gt;-->
+<!--        &lt;!&ndash;            <mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <mat-label>Question Image</mat-label>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <input matInput type="file" formControlName="questionImg">&ndash;&gt;-->
+<!--        &lt;!&ndash;            </mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;          </div>&ndash;&gt;-->
+
+<!--        &lt;!&ndash; Option 1 &ndash;&gt;-->
+<!--        <div class="row">-->
+<!--          <mat-form-field>-->
+<!--            <mat-label>Option 1 Text</mat-label>-->
+<!--            <input matInput type="text" formControlName="optionText1">-->
+<!--          </mat-form-field>-->
+<!--          &lt;!&ndash;            <mat-form-field>&ndash;&gt;-->
+
+<!--          <div class="image_input">-->
+<!--            <mat-label>Option 1 Image</mat-label>-->
+<!--            <input type="file" formControlName="optionImg1" (change)="onFileChange('optionImg1', $event)" accept="image/*">-->
+<!--            <mat-icon matSuffix>attach_file</mat-icon>-->
+<!--          </div>-->
+
+
+
+
+<!--          &lt;!&ndash; Image preview container &ndash;&gt;-->
+<!--          <div class="image_preview">-->
+<!--            <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Image Preview" [style.height.px]=50>-->
+<!--          </div>-->
+
+<!--          &lt;!&ndash;            </mat-form-field>&ndash;&gt;-->
+<!--        </div>-->
+
+
+
+<!--        &lt;!&ndash; Option 2 &ndash;&gt;-->
+<!--        &lt;!&ndash;          <div class="row">&ndash;&gt;-->
+<!--        &lt;!&ndash;            <mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <mat-label>Option 2 Text</mat-label>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <input matInput type="text" formControlName="optionText2">&ndash;&gt;-->
+<!--        &lt;!&ndash;            </mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <mat-label>Option 2 Image</mat-label>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <input matInput type="file" formControlName="optionImg2">&ndash;&gt;-->
+<!--        &lt;!&ndash;            </mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;          </div>&ndash;&gt;-->
+
+<!--        &lt;!&ndash;          &lt;!&ndash; Option 3 &ndash;&gt;&ndash;&gt;-->
+<!--        &lt;!&ndash;          <div class="row">&ndash;&gt;-->
+<!--        &lt;!&ndash;            <mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <mat-label>Option 3 Text</mat-label>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <input matInput type="text" formControlName="optionText3">&ndash;&gt;-->
+<!--        &lt;!&ndash;            </mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <mat-label>Option 3 Image</mat-label>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <input matInput type="file" formControlName="optionImg3">&ndash;&gt;-->
+<!--        &lt;!&ndash;            </mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;          </div>&ndash;&gt;-->
+
+<!--        &lt;!&ndash;          &lt;!&ndash; Option 4 &ndash;&gt;&ndash;&gt;-->
+<!--        &lt;!&ndash;          <div class="row">&ndash;&gt;-->
+<!--        &lt;!&ndash;            <mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <mat-label>Option 4 Text</mat-label>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <input matInput type="text" formControlName="optionText4">&ndash;&gt;-->
+<!--        &lt;!&ndash;            </mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <mat-label>Option 4 Image</mat-label>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <input matInput type="file" formControlName="optionImg4">&ndash;&gt;-->
+<!--        &lt;!&ndash;            </mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;          </div>&ndash;&gt;-->
+
+<!--        &lt;!&ndash;          &lt;!&ndash; Option 5 &ndash;&gt;&ndash;&gt;-->
+<!--        &lt;!&ndash;          <div class="row">&ndash;&gt;-->
+<!--        &lt;!&ndash;            <mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <mat-label>Option 5 Text</mat-label>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <input matInput type="text" formControlName="optionText5">&ndash;&gt;-->
+<!--        &lt;!&ndash;            </mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <mat-label>Option 5 Image</mat-label>&ndash;&gt;-->
+<!--        &lt;!&ndash;              <input matInput type="file" formControlName="optionImg5">&ndash;&gt;-->
+<!--        &lt;!&ndash;            </mat-form-field>&ndash;&gt;-->
+<!--        &lt;!&ndash;          </div>&ndash;&gt;-->
+
+<!--        &lt;!&ndash; Other Fields (correctAns, explanation, explanationImg, hardness, categories, subject, chapter, problemSetter, verified, published) &ndash;&gt;-->
+<!--        &lt;!&ndash; (You can add the other fields here, similar to how the question, optionText, and optionImg fields are added) &ndash;&gt;-->
+
+<!--        <div class="row pt-4">-->
+<!--          <div class="d-flex flex-column align-items-center">-->
+<!--            <button class="form-control" mat-raised-button color="primary" type="submit" [disabled]="mcqForm.invalid">-->
+<!--              Submit-->
+<!--            </button>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </form>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->

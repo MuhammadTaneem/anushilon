@@ -5,6 +5,7 @@ admin_table = Table(
     "admin", mapper_registry.metadata,
     Column('id', Integer, primary_key=True),
     Column('full_name', String),
+    Column('role', String),
     Column('password', String),
     Column('email', String),
     Column('active', Boolean, default=False)

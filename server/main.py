@@ -5,7 +5,7 @@ from starlette.responses import JSONResponse
 from core.exception import CustomException
 from core.middleware import user_middleware
 from modules.admin.main import router as user_router
-# from modules.pages.main import router as page_router
+from modules.mcq.main import router as mcq_router
 
 app = FastAPI()
 # app.add_middleware(user_middleware)
@@ -16,6 +16,15 @@ app.include_router(
     tags=["admin"],
 )
 
+app.include_router(
+    mcq_router,
+    prefix="/mcq",
+    tags=["mcq"],
+)
+
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
 origins = [
     "http://localhost:4200",
     "https://localhost.tiangolo.com",
@@ -32,11 +41,7 @@ app.add_middleware(
 )
 
 
-# app.include_router(
-#     page_router,
-#     prefix="/page",
-#     tags=["page"],
-# )
+
 
 
 # Custom Exception_handler --------------------------------
@@ -56,4 +61,5 @@ if __name__ == "__main__":
     print("program running")
     # uvicorn.run(app, host='0.0.0.0', port=8000)
     # uvicorn.run(app, host='localhost', port=8000)
+    # uvicorn.run("main:app", reload=True)
     uvicorn.run(app)
