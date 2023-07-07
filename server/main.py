@@ -22,14 +22,13 @@ app.include_router(
     tags=["mcq"],
 )
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
 origins = [
     "http://localhost:4200",
     "https://localhost.tiangolo.com",
     "http://localhost",
     "http://localhost:8080",
+    "http://127.0.0.1:8000/",
+    "*"
 ]
 
 app.add_middleware(
@@ -39,9 +38,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-
 
 
 # Custom Exception_handler --------------------------------
@@ -58,7 +54,6 @@ async def custom_exception_handler(request, exc: CustomException):
 
 
 if __name__ == "__main__":
-    print("program running")
     # uvicorn.run(app, host='0.0.0.0', port=8000)
     # uvicorn.run(app, host='localhost', port=8000)
     # uvicorn.run("main:app", reload=True)

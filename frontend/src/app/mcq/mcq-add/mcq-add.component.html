@@ -1,12 +1,12 @@
 <div class="container-fluid --bs-white">
   <div class="row">
-    <div class="col-9">
+    <div class="col">
       <button mat-icon-button [routerLink]="['/mcq']">
         <mat-icon>arrow_back</mat-icon>
       </button>
     </div>
 
-    <div class="col-3 p-2">
+    <div class="col p-2 d-flex justify-content-end">
       <button mat-raised-button color="primary" (click)="uploadExel.click()"> <mat-icon>grid_on</mat-icon>Upload Excel</button>
       <input #uploadExel  class="d-none" type="file" (change)="onExcelUpload($event)" accept=".xlsx, .xls">
 
@@ -35,7 +35,7 @@
         </mat-form-field>
       </div>
       <div class="col-12 col-md-3" *ngIf="questionImagePreviewUrl">
-        <img  [src]="questionImagePreviewUrl" alt="Image Preview" [style.height.px]=100  class="full-width">
+        <img  [src]="questionImagePreviewUrl" alt="Image Preview" [style.height.px]=150  class="full-width max_width">
       </div>
       <input #qImageInput type="file" formControlName="question_img" class="d-none" (change)="onImageChange('question', $event)" accept="image/*">
     </div>
@@ -130,11 +130,137 @@
         </div>
 
       </div>
+    </div>
 
 
+<!--    currect ans-->
 
+
+<!--    explanation-->
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="full-width">
+          <mat-label>Explanation</mat-label>
+          <textarea rows="4" matInput type="text" formControlName="explanation"></textarea>
+          <mat-error *ngIf="mcqForm.controls.explanation.invalid && (mcqForm.controls.explanation.dirty || mcqForm.controls.explanation.touched)">
+            <div *ngIf="mcqForm.controls.explanation.errors?.['required']">Explanation is required.</div>
+          </mat-error>
+          <button matSuffix type="button"  *ngIf="!explanationImagePreviewUrl" mat-icon-button color="primary" (click)="explanationImageInput.click()"> <mat-icon>image</mat-icon></button>
+          <button matSuffix type="button" *ngIf="explanationImagePreviewUrl" mat-icon-button color="primary" (click)="cancelImage('explanation')"> <mat-icon>close</mat-icon></button>
+        </mat-form-field>
+      </div>
+      <div class="col-12 col-md-3" *ngIf="explanationImagePreviewUrl">
+        <img  [src]="explanationImagePreviewUrl" alt="Image Preview" [style.height.px]=130  class="full-width max_width">
+      </div>
+      <input #explanationImageInput type="file" formControlName="explanation_img" class="d-none" (change)="onImageChange('explanation', $event)" accept="image/*">
+    </div>
+<!--    end explation-->
+
+<!--    correct ans -->
+
+    <div class="row">
+
+      <div class="col-12 col-sm-6 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Correct Answer</mat-label>
+          <mat-select formControlName="correct_ans">
+            <mat-option value="1">Option One </mat-option>
+            <mat-option value="2">Option Two </mat-option>
+            <mat-option value="3">Option Three</mat-option>
+            <mat-option value="4">Option Four</mat-option>
+          </mat-select>
+          <mat-error *ngIf="mcqForm.controls.correct_ans.invalid && (mcqForm.controls.correct_ans.dirty || mcqForm.controls.correct_ans.touched)">
+            <div *ngIf="mcqForm.controls.correct_ans.errors?.['required']">Correct Answer is required.</div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!--    end correct ans-->
+
+
+<!--      subject-->
+      <div class="col-12 col-sm-6 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Subject</mat-label>
+          <mat-select formControlName="subject" (selectionChange)="selectSubjectChange($event)">
+            <mat-option *ngFor="let subject of subjects" [value]="subject.name">{{ subject.value }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="mcqForm.controls.subject.invalid && (mcqForm.controls.subject.dirty || mcqForm.controls.subject.touched)">
+            <div *ngIf="mcqForm.controls.subject.errors?.['required']">Subject is required.</div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!--      end subject-->
+      <!--    chapter-->
+
+      <div class="col-12 col-sm-6 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Chapter</mat-label>
+          <mat-select formControlName="chapter">
+            <mat-option *ngFor="let chapter of selectedSubject|keyvalue" [value]=chapter.key>{{ chapter.value   }} </mat-option>
+
+          </mat-select>
+          <mat-error *ngIf="mcqForm.controls.chapter.invalid && (mcqForm.controls.chapter.dirty || mcqForm.controls.chapter.touched)">
+            <div *ngIf="mcqForm.controls.chapter.errors?.['required']">Chapter is required.</div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!--end chapter-->
+
+<!--      hardness-->
+      <div class="col-12 col-sm-6 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Hardness</mat-label>
+          <mat-select formControlName="hardness">
+            <mat-option *ngFor="let label of hardness|keyvalue" [value]=label.key>{{ label.value   }} </mat-option>
+
+          </mat-select>
+          <mat-error *ngIf="mcqForm.controls.hardness.invalid && (mcqForm.controls.hardness.dirty || mcqForm.controls.hardness.touched)">
+            <div *ngIf="mcqForm.controls.hardness.errors?.['required']">Hardness is required.</div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+<!--      hardness end-->
+
+
+      <!--      categories -->
+      <div class="col-12 col-sm-6 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="categories">
+            <mat-option *ngFor="let label of category|keyvalue" [value]=label.key>{{ label.value   }} </mat-option>
+
+          </mat-select>
+          <mat-error *ngIf="mcqForm.controls.categories.invalid && (mcqForm.controls.categories.dirty || mcqForm.controls.categories.touched)">
+            <div *ngIf="mcqForm.controls.categories.errors?.['required']">Category is required.</div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!--      categories end-->
+      <!--      problem_setter -->
+      <div class="col-12 col-sm-6 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Problem Setter</mat-label>
+          <mat-select formControlName="problem_setter">
+            <mat-option *ngFor="let label of problem_setter|keyvalue" [value]=label.key>{{ label.value   }} </mat-option>
+          </mat-select>        </mat-form-field>
+      </div>
+      <!--      problem_setter end-->
 
     </div>
+
+
+
+
+<div class="row mb-5  mt-4">
+<div class="col d-flex justify-content-center">
+    <button  mat-raised-button color="primary" type="submit">Submit</button>
+</div>
+</div>
+
+
+
+
   </form>
 </div>
 
