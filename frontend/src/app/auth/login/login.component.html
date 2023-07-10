@@ -14,7 +14,7 @@
           <div class="row">
             <mat-form-field>
               <mat-label>Email</mat-label>
-              <input matInput type="text" id="email" class="form-control" formControlName="email">
+              <input matInput type="text" id="email"  formControlName="email">
               <mat-error *ngIf="loginForm.controls.email.invalid && (loginForm.controls.email.dirty || loginForm.controls.email.touched)">
                 <div *ngIf="loginForm.controls.email.errors?.['required']">
                   Email is required.
@@ -27,7 +27,7 @@
           <div class="row">
             <mat-form-field>
               <mat-label>Password</mat-label>
-              <input matInput type="password" id="password" class="form-control" formControlName="password">
+              <input matInput type="password" id="password"  formControlName="password">
               <mat-error *ngIf="loginForm.controls.password.invalid && (loginForm.controls.password.dirty || loginForm.controls.password.touched)">
                 <div *ngIf="loginForm.controls.password.errors?.['required']">
                   Password is required.

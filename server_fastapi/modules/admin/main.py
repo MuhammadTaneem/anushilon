@@ -46,7 +46,7 @@ async def login_user(request: Request):
         data = {
             'id': admin_exists.id,
             'email': admin_exists.email,
-            'role': get_admin_role(admin_exists.role),
+            'role': admin_exists.role,
             'expire': expire_time,
             'token': generate_token(email=admin_exists.email),
         }

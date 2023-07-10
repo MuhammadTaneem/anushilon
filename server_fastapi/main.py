@@ -22,18 +22,28 @@ app.include_router(
     tags=["mcq"],
 )
 
+
+
+
+# origins = [
+# #     "http://localhost:4200",
+# #     "https://localhost.tiangolo.com",
+# #     "http://localhost",
+# #     "http://localhost:8080",
+# #     "http://127.0.0.1:8000/",
+#     "*"
+# ]
 origins = [
     "http://localhost:4200",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://localhost:8080",
-    "http://127.0.0.1:8000/",
-    "*"
+    "https://localhost:4200/",
+    "https://localhost:4200",
+    # other origins if needed
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    # allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

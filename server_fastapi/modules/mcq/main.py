@@ -2,8 +2,8 @@ import os
 import uuid
 import formencode
 import starlette
-from fastapi import APIRouter, status, Request, Depends, Query, File
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, status, Depends, Query, File, Form, Request
+from fastapi.responses import JSONResponse, orjson
 from starlette.datastructures import MultiDict, UploadFile
 from core.exception import CustomException
 from modules.admin.models import Admin
@@ -37,7 +37,6 @@ def save_image(image_data, file_name):
 
 
 async def file_to_url(form_data):
-    print("come to json filer -------------------------")
     image_url_keys = [
         "question_img_url",
         "option_img_url_1",
@@ -47,10 +46,7 @@ async def file_to_url(form_data):
         "explanation_img",
     ]
     for item in image_url_keys:
-
         if isinstance(form_data[item], starlette.datastructures.UploadFile):
-            print("-----------------------------")
-
             image_data = await form_data[item].read()
             if form_data[item].content_type in ["image/jpeg", "image/png", "image/gif"]:
                 form_data[item] = save_image(image_data, (form_data[item]).filename)
@@ -68,13 +64,12 @@ async def file_to_url(form_data):
 
 @router.get("/context")
 def get_mcq_add_context():
-
     try:
         session = SessionManager.create_session()
         admins = session.query(Admin).filter(Admin.role == "problem_setter").all()
         admin_data = {admin.id: admin.full_name for admin in admins}
         # admin_data = [{"id": admin.id, "name": admin.full_name} for admin in admins]
-        data= {
+        data = {
             'hardness': hardness_enum_dict(),
             'category': category_enum_dict(),
             'subject': subjects_enum_dict(),
@@ -127,16 +122,40 @@ def get_mcq(
 
 
 @router.post("/")
-async def create_mcq(request: Request,
-                     current_user: Admin = Depends(get_current_user), ):
+async def create_mcq(mcqSchema: McqSchema,
+                     request :Request
+                     # current_user: Admin = Depends(get_current_user),
+                     ):
     try:
-        forms = await request.form()
-        # import pdb;pdb.set_trace()
-        form_data = MultiDict(forms)
-        if current_user.role == AdminRole.problem_setter.name:
-            form_data["problem_setter"] = current_user.id
-        form_data = await file_to_url(form_data)  # convert the image file to image path
+        json = await request.json()
+
+        import pdb;pdb.set_trace()
+
+        #
+        # body = await request.body()
+        # print(body)
+        #
+        # form_data = await request.form(
+        #     # Set the boundary explicitly
+        #     parser=lambda x: UploadFile(x, "boundary")
+        # )
+        files = []
+        data = {}
+        # form_data = await request.form()
+        form_data = mcqSchema
+        # form_data = {}
+        print(mcqSchema)
+
+        # form_data = MultiDict(form_data)
+
+        # if current_user.role == AdminRole.problem_setter.name:
+        #     form_data.problem_setter = current_user.id
+        # elif form_data.problem_setter is None:
+
+        # form_data = await file_to_url(form_data)  # convert the image file to image path
+        print("========================")
         mcq_dict = dict(form_data)
+
         clean_data = McqValidator.to_python(mcq_dict)
         data = MCQ(**clean_data)
         session = SessionManager.create_session()
@@ -156,7 +175,8 @@ async def create_mcq(request: Request,
         raise e
 
     except Exception as e:
-        # import pdb;pdb.set_trace()
+        import pdb;
+        pdb.set_trace()
         raise CustomException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, status='Failed',
                               message='Internal server error', error=e)
 

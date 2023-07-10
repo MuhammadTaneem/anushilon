@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import * as XLSX from 'xlsx';
 import {McqService} from "../mcq.service";
-import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-mcq-add',
@@ -176,36 +175,62 @@ ngOnInit() {
   }
 
 
+  formToDictionary(): { [key: string]: any } {
+    const formValue = this.mcqForm.value;
+    const dictionary: { [key: string]: any } = {};
+
+    Object.keys(formValue).forEach((key) => {
+      // @ts-ignore
+      dictionary[key] = formValue[key] || '';
+
+    });
+
+    return dictionary;
+  }
 
   onSubmit(): void {
-    if (this.mcqForm.valid) {
-      // const formData = this.mcqForm.value;
-      let formData :FormData =  new FormData();
+  console.log(this.mcqForm.value);
 
-      formData.append('question', this.mcqForm.value.question || '');
-      formData.append('option_text_1', this.mcqForm.value.option_text_1 || '');
-      formData.append('option_text_2', this.mcqForm.value.option_text_2 || '');
-      formData.append('option_text_3', this.mcqForm.value.option_text_3 || '');
-      formData.append('option_text_4', this.mcqForm.value.option_text_4 || '');
-      formData.append('option_text_5', this.mcqForm.value.option_text_5 || '');
-      formData.append('correct_ans', this.mcqForm.value.option_text_5 || '');
-      formData.append('explanation', this.mcqForm.value.option_text_5 || '');
-      formData.append('subject', this.mcqForm.value.option_text_5 || '');
-      formData.append('chapter', this.mcqForm.value.option_text_5 || '');
-      formData.append('hardness', this.mcqForm.value.option_text_5 || '');
-      formData.append('categories', this.mcqForm.value.option_text_5 || '');
-      formData.append('problem_setter', this.mcqForm.value.option_text_5 || '');
-      formData.append('verified', this.mcqForm.value.option_text_5 || '');
-      formData.append('published', this.mcqForm.value.option_text_5 || '');
-      formData.append('question_img', this.questionImagePreviewUrl?? this.mcqForm.value.question_img);
-      formData.append('option_img_1', this.optionOneImagePreviewUrl?? this.mcqForm.value.option_img_1);
-      formData.append('option_img_2', this.optionTwoImagePreviewUrl?? this.mcqForm.value.option_img_2);
-      formData.append('option_img_3', this.optionThreeImagePreviewUrl?? this.mcqForm.value.option_img_3);
-      formData.append('option_img_4', this.optionFourImagePreviewUrl?? this.mcqForm.value.option_img_4);
-      formData.append('option_img_4', "");
-      formData.append('explanation_img', this.explanationImagePreviewUrl?? this.mcqForm.value.explanation_img);
-console.log(formData);
-      this.mcqService.addNewMcq(formData).subscribe({
+    if (this.mcqForm.valid) {
+
+
+      // const formData = this.mcqForm.value;
+      // console.log(this.mcqForm.value.question || '')
+      //
+      //
+      // formData.append('question', this.mcqForm.value.question || '');
+      // console.log(formData);
+      // formData.append('option_text_1', this.mcqForm.value.option_text_1 || '');
+      // formData.append('option_text_2', this.mcqForm.value.option_text_2 || '');
+      // formData.append('option_text_3', this.mcqForm.value.option_text_3 || '');
+      // formData.append('option_text_4', this.mcqForm.value.option_text_4 || '');
+      // formData.append('option_text_5', this.mcqForm.value.option_text_5 || '');
+      // formData.append('correct_ans', this.mcqForm.value.option_text_5 || '');
+      // formData.append('explanation', this.mcqForm.value.option_text_5 || '');
+      // formData.append('subject', this.mcqForm.value.option_text_5 || '');
+      // formData.append('chapter', this.mcqForm.value.option_text_5 || '');
+      // formData.append('hardness', this.mcqForm.value.option_text_5 || '');
+      // formData.append('categories', this.mcqForm.value.option_text_5 || '');
+      // formData.append('problem_setter', this.mcqForm.value.option_text_5 || '');
+      // formData.append('verified', this.mcqForm.value.option_text_5 || '');
+      // formData.append('published', this.mcqForm.value.option_text_5 || '');
+      // console.log(formData);
+      // formData.append('question_img_url', this.questionImagePreviewUrl?? this.mcqForm.value.question_img);
+      // formData.append('option_img_url_1', this.optionOneImagePreviewUrl?? this.mcqForm.value.option_img_1);
+      // formData.append('option_img_url_2', this.optionTwoImagePreviewUrl?? this.mcqForm.value.option_img_2);
+      // formData.append('option_img_url_3', this.optionThreeImagePreviewUrl?? this.mcqForm.value.option_img_3);
+      // formData.append('option_img_url_4', this.optionFourImagePreviewUrl?? this.mcqForm.value.option_img_4);
+      // formData.append('option_img_url_5', "");
+      // formData.append('explanation_img', this.explanationImagePreviewUrl?? this.mcqForm.value.explanation_img);
+      // console.log(formData);
+      this.mcqService.addNewMcq(this.formToDictionary(),
+        this.questionImagePreviewUrl,
+        this.optionOneImagePreviewUrl,
+        this.optionTwoImagePreviewUrl,
+        this.optionThreeImagePreviewUrl,
+        this.optionFourImagePreviewUrl,
+        this.explanationImagePreviewUrl
+      ).subscribe({
         next: (response)=>{
           console.log(response);
         },

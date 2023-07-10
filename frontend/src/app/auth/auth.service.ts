@@ -33,12 +33,12 @@ export class AuthService {
       email, password
     }).subscribe({
       next: (loginData)=>{
-        console.log(loginData.status);
-        console.log(loginData.message);
-        console.log(loginData.user.id);
-        console.log(loginData.user.email);
-        console.log(loginData.user.token);
-        console.log(loginData.user.expire);
+
+        localStorage.setItem('uid', loginData.user.id);
+        localStorage.setItem('email', loginData.user.email);
+        localStorage.setItem('token', loginData.user.token);
+        localStorage.setItem('role', loginData.user.role);
+        this.router.navigate(['/']);
       },
       error: (err)=>{
         console.log(err.status_code);
@@ -49,5 +49,10 @@ export class AuthService {
       },
       complete:()=>{}
     });
+  }
+
+  getToken() {
+    return localStorage.getItem('token');
+
   }
 }

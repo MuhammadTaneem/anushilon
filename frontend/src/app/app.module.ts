@@ -10,8 +10,9 @@ import {DashboardModule} from "./dashboard/dashboard.module";
 import {McqModule} from "./mcq/mcq.module";
 import {AuthModule} from "./auth/auth.module";
 import {MaterialModule} from "./material/material.module";
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {HttpClientModule} from "@angular/common/http";
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {AuthInterceptor} from "./auth/auth.interceptor";
 
 @NgModule({
   declarations: [
@@ -31,7 +32,13 @@ import {HttpClientModule} from "@angular/common/http";
     BrowserAnimationsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
