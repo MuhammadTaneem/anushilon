@@ -1,20 +1,95 @@
-from rest_framework import generics, mixins
-from rest_framework.authentication import BasicAuthentication
-from rest_framework.permissions import AllowAny
-
+from django.views.decorators.http import require_GET
+from rest_framework import generics, mixins, status
+from rest_framework.authentication import BasicAuthentication, TokenAuthentication
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+from django.db.models import Q
+from .enum import hardness_enum_dict, category_enum_dict, subjects_enum_dict
 from .models import MCQ
 from .serializers import MCQSerializer
+from custom_user.models import CustomUser
+from django.http import JsonResponse
 
 
-class MCQView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.RetrieveUpdateAPIView):
+class MCQView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = MCQ.objects.all()
     serializer_class = MCQSerializer
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [AllowAny]
+    authentication_classes = [BasicAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     lookup_field = ['id']
+
+    def get_queryset(self):
+        queryset = self.queryset
+
+        subject = self.request.query_params.get('subject')
+        if subject is not None:
+            queryset = queryset.filter(subject=subject)
+
+        chapter = self.request.query_params.get('chapter')
+        if chapter is not None:
+            queryset = queryset.filter(chapter=chapter)
+
+        problem_setter = self.request.query_params.get('problem_setter')
+        if problem_setter is not None:
+            queryset = queryset.filter(problem_setter=problem_setter)
+
+        hardness = self.request.query_params.get('hardness')
+        if hardness is not None:
+            queryset = queryset.filter(hardness=hardness)
+
+        category = self.request.query_params.get('category')
+        if category is not None:
+            queryset = queryset.filter(categories=category)
+
+        q = self.request.query_params.get('q')
+        if q is not None:
+            q = q.strip().lower()
+            queryset = queryset.filter(Q(question__icontains=q))
+
+        return queryset
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        problem_setter = request.data.get('problem_setter')
+        if not problem_setter:
+            mutable_data = request.data.copy()  # Create a mutable copy of request.data
+            mutable_data['problem_setter'] = request.user.id
+            request._data = mutable_data  # Update request._data with the modified copy
+
         return self.create(request, *args, **kwargs)
+
+
+class MCQUpdateView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
+    queryset = MCQ.objects.all()
+    serializer_class = MCQSerializer
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+
+# from django.views.decorators.http import require_GET
+
+@require_GET
+def get_mcq_add_context(request):
+    try:
+        admins = CustomUser.objects.filter(role="problem_setter")
+        admin_data = {admin.id: admin.full_name for admin in admins}
+
+        data = {
+            'hardness': hardness_enum_dict(),
+            'category': category_enum_dict(),
+            'subject': subjects_enum_dict(),
+            'problem_setter': admin_data
+        }
+
+        return JsonResponse({'status': 200, 'message': 'context loaded', 'data': data})
+
+    except Exception as e:
+        return JsonResponse({"status_code": 500, "status": 'Failed', "message": 'Internal server error', "error": str(e)}, status=500)
+

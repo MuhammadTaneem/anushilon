@@ -12,9 +12,10 @@ import {AuthService} from "./auth.service";
 export class AuthInterceptor implements HttpInterceptor {
 
   private excludedRoutes: RegExp[] = [
-    /\/admin\/login\/$/,
-    /\/admin\/signin\/$/,
-    /admin/,
+    // /\/admin\/login\/$/,
+    // /\/admin\/signin\/$/,
+    /auth/,
+    /context/,
     /\/context\/$/, // Route pattern with dynamic parameter
   ];
 
@@ -34,15 +35,17 @@ export class AuthInterceptor implements HttpInterceptor {
     if (!this.is_free(request.url)) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${auth_token}`,
-          // 'Content-Type': request.body instanceof FormData ? 'application/json'  :  'multipart/form-data'
-          'Content-Type': 'multipart/form-data'
+          Authorization: `Token ${auth_token}`
         },
       });
-    }else{
+    }
+
+      // 'Content-Type': request.body instanceof FormData ? 'multipart/form-data': 'application/json'
+    // 'Content-Type': 'multipart/form-data'
+    else{
       request = request.clone({
         setHeaders: {
-          'Content-Type': request.body instanceof FormData ? 'application/json'  :  'multipart/form-data; charset=utf-8'
+          // 'Content-Type': request.body instanceof FormData ? 'multipart/form-data': 'application/json'
         },
       });
     }

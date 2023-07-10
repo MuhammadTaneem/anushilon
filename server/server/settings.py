@@ -44,12 +44,14 @@ INSTALLED_APPS = [
     'mcq',
 
 ]
-CORS_ALLOWED_ORIGIN = '*'
+# CORS_ALLOWED_ORIGIN = '*'
+CORS_ORIGIN_ALLOW_ALL = True
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -141,7 +143,11 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        # Other authentication classes...
+    ],
 }
 AUTH_USER_MODEL = 'custom_user.CustomUser'
 import os
@@ -153,4 +159,4 @@ MEDIA_URL = '/media/'
 
 # Default storage backend for uploaded files
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB

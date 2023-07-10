@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
 import * as XLSX from 'xlsx';
 import {McqService} from "../mcq.service";
 
@@ -20,12 +20,24 @@ export class McqAddComponent implements OnInit {
   optionThreeImagePreviewUrl: any;
   optionFourImagePreviewUrl: any;
   explanationImagePreviewUrl: any;
+
+
+  questionImageFile: any;
+  optionOneImageFile: any;
+  optionTwoImageFile: any;
+  optionThreeImageFile: any;
+  optionFourImageFile: any;
+  explanationImageFile: any;
   selectedSubject:any;
 
   subjects :any;
   category :any;
   hardness :any;
   problem_setter:any;
+
+
+
+
 
   mcqForm = new FormGroup({
   question: new FormControl('', Validators.required),
@@ -38,8 +50,6 @@ export class McqAddComponent implements OnInit {
   option_img_3: new FormControl(null),
   option_text_4: new FormControl(null),
   option_img_4: new FormControl(null),
-  option_text_5: new FormControl(null),
-  option_img_5: new FormControl(null),
   correct_ans: new FormControl(null,Validators.required),
   explanation: new FormControl('',Validators.required),
   explanation_img: new FormControl(null),
@@ -48,9 +58,10 @@ export class McqAddComponent implements OnInit {
   subject: new FormControl(null,Validators.required),
   chapter: new FormControl({ value: null, disabled: true }),
   problem_setter: new FormControl(),
-  verified: new FormControl({ value: false, disabled: true }),
-  published: new FormControl({ value: false, disabled: true }),
-});
+  verified: new FormControl( false ),
+  published: new FormControl( false ),
+  }, { validators: this.optionValidation });
+
 
 
 
@@ -62,7 +73,12 @@ ngOnInit() {
 
 
 
-  constructor(private mcqService: McqService) {}
+
+
+  constructor(
+    private mcqService: McqService,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {}
   getConText(){
     this.mcqService.getMcqAddContext().subscribe({
       next: (response)=>{
@@ -70,11 +86,11 @@ ngOnInit() {
         this.category = response.data.category;
         this.hardness = response.data.hardness;
         this.problem_setter = response.data.problem_setter;
-        console.log(this.subjects);
       },
       error: (err)=>{
         console.log(err.status_code);
         console.log(err.error);
+
         console.log(err.error.status);
         console.log(err.error.errors);
         console.log(err.error.message);
@@ -84,7 +100,42 @@ ngOnInit() {
   }
 
   // In your component class
+  optionValidation(control: AbstractControl) {
 
+    if (!control.get('option_text_1')?.value && !control.get('option_img_1')?.value) {
+      control.get('option_text_1')?.setErrors({ required: true });
+      control.get('option_img_1')?.setErrors({ required: true });
+    } else {
+      control.get('option_text_1')?.setErrors(null);
+      control.get('option_img_1')?.setErrors(null);
+    }
+
+    if (!control.get('option_text_2')?.value && !control.get('option_img_2')?.value) {
+      control.get('option_text_2')?.setErrors({ required: true });
+      control.get('option_img_2')?.setErrors({ required: true });
+    } else {
+      control.get('option_text_2')?.setErrors(null);
+      control.get('option_img_2')?.setErrors(null);
+    }
+
+    if (!control.get('option_text_3')?.value && !control.get('option_img_3')?.value) {
+      control.get('option_text_3')?.setErrors({ required: true });
+      control.get('option_img_3')?.setErrors({ required: true });
+    } else {
+      control.get('option_text_3')?.setErrors(null);
+      control.get('option_img_3')?.setErrors(null);
+    }
+
+
+    if (!control.get('option_text_4')?.value && !control.get('option_img_4')?.value) {
+      control.get('option_text_4')?.setErrors({ required: true });
+      control.get('option_img_4')?.setErrors({ required: true });
+    } else {
+      control.get('option_text_4')?.setErrors(null);
+      control.get('option_img_4')?.setErrors(null);
+    }
+    return null;
+  }
   selectSubjectChange(event:any){
     // @ts-ignore
     this.selectedSubject = this.subjects.find(subject=> subject.name === event.value);
@@ -125,21 +176,27 @@ ngOnInit() {
         switch (formControlName) {
           case 'question':
             this.questionImagePreviewUrl = e.target.result;
+            this.questionImageFile = file;
             break;
           case 'option_1':
             this.optionOneImagePreviewUrl = e.target.result;
+            this.optionOneImageFile = file;
             break;
           case 'option_2':
             this.optionTwoImagePreviewUrl = e.target.result;
+            this.optionTwoImageFile = file;
             break;
           case 'option_3':
             this.optionThreeImagePreviewUrl = e.target.result;
+            this.optionThreeImageFile=file;
             break;
           case 'option_4':
             this.optionFourImagePreviewUrl = e.target.result;
+            this.optionFourImageFile = file;
             break;
           case 'explanation':
             this.explanationImagePreviewUrl = e.target.result;
+            this.explanationImageFile = file;
             break;
           default:
             break;
@@ -153,21 +210,27 @@ ngOnInit() {
     switch (formControlName) {
       case 'question':
         this.questionImagePreviewUrl = null;
+        this.questionImageFile =  null;
         break;
       case 'option_1':
         this.optionOneImagePreviewUrl = null;
+        this.optionOneImageFile = null;
         break;
       case 'option_2':
         this.optionTwoImagePreviewUrl = null;
+        this.optionTwoImageFile = null;
         break;
       case 'option_3':
         this.optionThreeImagePreviewUrl = null;
+        this.optionThreeImageFile = null;
         break;
       case 'option_4':
         this.optionFourImagePreviewUrl = null;
+        this.optionFourImageFile = null;
         break;
       case 'explanation':
         this.explanationImagePreviewUrl = null;
+        this.explanationImageFile = null;
         break;
       default:
         break;
@@ -188,58 +251,72 @@ ngOnInit() {
     return dictionary;
   }
 
+
+
+
+  readFormData(){
+
+  }
+
   onSubmit(): void {
   console.log(this.mcqForm.value);
 
     if (this.mcqForm.valid) {
 
 
-      // const formData = this.mcqForm.value;
-      // console.log(this.mcqForm.value.question || '')
-      //
-      //
-      // formData.append('question', this.mcqForm.value.question || '');
-      // console.log(formData);
-      // formData.append('option_text_1', this.mcqForm.value.option_text_1 || '');
-      // formData.append('option_text_2', this.mcqForm.value.option_text_2 || '');
-      // formData.append('option_text_3', this.mcqForm.value.option_text_3 || '');
-      // formData.append('option_text_4', this.mcqForm.value.option_text_4 || '');
-      // formData.append('option_text_5', this.mcqForm.value.option_text_5 || '');
-      // formData.append('correct_ans', this.mcqForm.value.option_text_5 || '');
-      // formData.append('explanation', this.mcqForm.value.option_text_5 || '');
-      // formData.append('subject', this.mcqForm.value.option_text_5 || '');
-      // formData.append('chapter', this.mcqForm.value.option_text_5 || '');
-      // formData.append('hardness', this.mcqForm.value.option_text_5 || '');
-      // formData.append('categories', this.mcqForm.value.option_text_5 || '');
-      // formData.append('problem_setter', this.mcqForm.value.option_text_5 || '');
-      // formData.append('verified', this.mcqForm.value.option_text_5 || '');
-      // formData.append('published', this.mcqForm.value.option_text_5 || '');
-      // console.log(formData);
-      // formData.append('question_img_url', this.questionImagePreviewUrl?? this.mcqForm.value.question_img);
-      // formData.append('option_img_url_1', this.optionOneImagePreviewUrl?? this.mcqForm.value.option_img_1);
-      // formData.append('option_img_url_2', this.optionTwoImagePreviewUrl?? this.mcqForm.value.option_img_2);
-      // formData.append('option_img_url_3', this.optionThreeImagePreviewUrl?? this.mcqForm.value.option_img_3);
-      // formData.append('option_img_url_4', this.optionFourImagePreviewUrl?? this.mcqForm.value.option_img_4);
-      // formData.append('option_img_url_5', "");
-      // formData.append('explanation_img', this.explanationImagePreviewUrl?? this.mcqForm.value.explanation_img);
-      // console.log(formData);
-      this.mcqService.addNewMcq(this.formToDictionary(),
-        this.questionImagePreviewUrl,
-        this.optionOneImagePreviewUrl,
-        this.optionTwoImagePreviewUrl,
-        this.optionThreeImagePreviewUrl,
-        this.optionFourImagePreviewUrl,
-        this.explanationImagePreviewUrl
+      // let formData = this.mcqForm.value;
+      let formData:FormData = new FormData()
+
+
+      formData.append('question', this.mcqForm.value.question || '');
+      formData.append('option_text_1', this.mcqForm.value.option_text_1 || '');
+      formData.append('option_text_2', this.mcqForm.value.option_text_2 || '');
+      formData.append('option_text_3', this.mcqForm.value.option_text_3 || '');
+      formData.append('option_text_4', this.mcqForm.value.option_text_4 || '');
+      formData.append('correct_ans', this.mcqForm.value.correct_ans || '');
+      formData.append('explanation', this.mcqForm.value.explanation || '');
+      formData.append('subject', this.mcqForm.value.subject || '');
+      formData.append('chapter', this.mcqForm.value.chapter || '');
+      formData.append('hardness', this.mcqForm.value.hardness || '');
+      formData.append('categories', this.mcqForm.value.categories || '');
+      formData.append('problem_setter', this.mcqForm.value.problem_setter || '');
+      // formData.append('verified',  this.mcqForm.value.verified);
+      // formData.append('published', this.mcqForm.value.problem_setter);
+      if(this.questionImageFile){
+      formData.append('question_img', this.questionImageFile);
+      }
+      if(this.optionOneImageFile){
+      formData.append('option_img_1', this.optionOneImageFile);
+      }
+      if(this.optionTwoImageFile){
+      formData.append('option_img_2', this.optionTwoImageFile);
+      }
+      if(this.optionThreeImageFile){
+      formData.append('option_img_3', this.optionThreeImageFile);
+      }
+      if(this.optionFourImageFile){
+      formData.append('option_img_4', this.optionFourImageFile);
+      }
+      if(this.explanationImageFile) {
+      formData.append('explanation_img', this.explanationImageFile);
+      }
+
+      this.mcqService.addNewMcq(
+        formData
       ).subscribe({
         next: (response)=>{
           console.log(response);
         },
         error: (err)=>{
-          console.log(err.status_code);
           console.log(err.error);
-          console.log(err.error.status);
-          console.log(err.error.errors);
-          console.log(err.error.message);
+          if(err.error){
+
+            for (let [key, value] of Object.entries(err.error)) {
+              // @ts-ignore
+              this.mcqForm.controls[key].setErrors({'api_error':value});
+            }
+            console.log(this.mcqForm)
+          }
         },
         complete:()=>{}
       });

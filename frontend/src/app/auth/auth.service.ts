@@ -11,7 +11,7 @@ import {Location} from '@angular/common';
 })
 export class AuthService {
 
-  BACKEND_URL = environment.apiUrl + 'admin/';
+  BACKEND_URL = environment.apiUrl + 'auth/';
   isAuthenticated = false;
   uid!: any;
   token!: any;
@@ -33,14 +33,16 @@ export class AuthService {
       email, password
     }).subscribe({
       next: (loginData)=>{
+        console.log(loginData);
 
-        localStorage.setItem('uid', loginData.user.id);
-        localStorage.setItem('email', loginData.user.email);
-        localStorage.setItem('token', loginData.user.token);
-        localStorage.setItem('role', loginData.user.role);
+        localStorage.setItem('uid', loginData.id);
+        localStorage.setItem('email', loginData.email);
+        localStorage.setItem('token', loginData.token);
+        localStorage.setItem('role', loginData.role);
         this.router.navigate(['/']);
       },
       error: (err)=>{
+        console.log(err);
         console.log(err.status_code);
         console.log(err.error);
         console.log(err.error.status);
@@ -53,6 +55,5 @@ export class AuthService {
 
   getToken() {
     return localStorage.getItem('token');
-
   }
 }

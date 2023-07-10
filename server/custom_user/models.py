@@ -1,9 +1,8 @@
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
 from enum import Enum
-
 from custom_user.manager import CustomUserManager
-from custom_user.user_enum import UserRoleEnum
+from custom_user.enum import UserRole
 
 
 class CustomUser(AbstractBaseUser):
@@ -11,8 +10,8 @@ class CustomUser(AbstractBaseUser):
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=50)
     is_staff = models.BooleanField(default=False)
-    role = models.CharField(max_length=20, choices=[(role.name, role.value) for role in UserRoleEnum],
-                            default=UserRoleEnum.student.value)
+    role = models.CharField(max_length=20, choices=[(role.name, role.value) for role in UserRole],
+                            default=UserRole.student.value)
 
     objects = CustomUserManager()
 
