@@ -1,6 +1,7 @@
 from django.views.decorators.http import require_GET
 from rest_framework import generics, mixins, status
 from rest_framework.authentication import BasicAuthentication, TokenAuthentication
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from django.db.models import Q
 from .enum import hardness_enum_dict, category_enum_dict, subjects_enum_dict
@@ -11,7 +12,7 @@ from django.http import JsonResponse
 
 
 class MCQView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
-    queryset = MCQ.objects.all()
+    # queryset = MCQ.objects.all()
     serializer_class = MCQSerializer
     authentication_classes = [BasicAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -19,7 +20,6 @@ class MCQView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAP
 
     def get_queryset(self):
         queryset = self.queryset
-
         subject = self.request.query_params.get('subject')
         if subject is not None:
             queryset = queryset.filter(subject=subject)
@@ -65,6 +65,7 @@ class MCQUpdateView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, generics
     serializer_class = MCQSerializer
     authentication_classes = [BasicAuthentication]
     permission_classes = [AllowAny]
+    parser_classes = [MultiPartParser]
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)

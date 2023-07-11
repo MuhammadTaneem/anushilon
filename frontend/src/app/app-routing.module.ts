@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {HomepageComponent} from "./homepage/homepage.component";
+import {authGuard} from "./auth/auth.guard";
 
 const routes: Routes = [
   {
     path: '',
-    // pathMatch: 'full',
     component: HomepageComponent,
     children: [
       {
@@ -16,11 +16,13 @@ const routes: Routes = [
       },
       {
         path: 'dashboard',
+        canActivate: [authGuard],
         loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
 
       },
       {
         path: 'mcq',
+        canActivate: [authGuard],
         loadChildren: () => import('./mcq/mcq.module').then((m) => m.McqModule),
       },
       // {

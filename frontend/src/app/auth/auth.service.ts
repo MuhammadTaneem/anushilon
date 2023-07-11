@@ -12,7 +12,6 @@ import {Location} from '@angular/common';
 export class AuthService {
 
   BACKEND_URL = environment.apiUrl + 'auth/';
-  isAuthenticated = false;
   uid!: any;
   token!: any;
   tokenTimer: any;
@@ -56,4 +55,23 @@ export class AuthService {
   getToken() {
     return localStorage.getItem('token');
   }
+
+
+  public isProblemSetter(): boolean {
+    const role = localStorage.getItem('role');
+    return role == 'problem_setter';
+  }
+  public isAuthenticated(): boolean {
+    const token = localStorage.getItem('token');
+    return !!token;
+  }
+
+
+  public  logout(){
+    localStorage.clear();
+    this.router.navigate(['/auth/login']);
+  }
+
+
+
 }

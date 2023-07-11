@@ -1,0 +1,80 @@
+# Django project files
+*.pyc
+*.pyo
+__pycache__/
+
+# Secret key
+secret_key.txt
+
+# Development and environment files
+.env
+*.sqlite3
+*.db
+*.db.sqlite3
+
+# Static files
+/staticfiles/
+
+# Media files
+/media/
+
+# Logs
+/logs/
+
+# Virtual environment
+venv/
+env/
+
+# Dependency directories
+/bin/
+/build/
+/dist/
+/lib/
+/include/
+/Scripts/
+/.vscode/
+/.idea/
+
+# Editor-specific files
+*.swp
+*.swo
+*.swn
+*.bak
+*.bak.*
+*.~*
+
+# Compiled Python files
+*.pyc
+*.pyo
+*.pyd
+
+# macOS specific files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows thumbnail cache files
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+
+# Windows Desktop.ini files
+Desktop.ini
+
+# Visual Studio Code specific files
+.vscode/
+*.code-workspace
+
+# PyCharm specific files
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# PyDev specific files
+.project
+.pydevproject
+
+# Jupyter Notebook specific files
+.ipynb_checkpoints/
+*.ipynb.meta

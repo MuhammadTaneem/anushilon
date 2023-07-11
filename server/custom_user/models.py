@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
-from enum import Enum
 from custom_user.manager import CustomUserManager
 from custom_user.enum import UserRole
 
@@ -14,7 +13,6 @@ class CustomUser(AbstractBaseUser):
                             default=UserRole.student.value)
 
     objects = CustomUserManager()
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
@@ -26,3 +24,5 @@ class CustomUser(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+

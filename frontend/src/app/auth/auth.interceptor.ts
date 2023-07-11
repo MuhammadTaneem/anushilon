@@ -42,13 +42,13 @@ export class AuthInterceptor implements HttpInterceptor {
 
       // 'Content-Type': request.body instanceof FormData ? 'multipart/form-data': 'application/json'
     // 'Content-Type': 'multipart/form-data'
-    else{
-      request = request.clone({
-        setHeaders: {
-          // 'Content-Type': request.body instanceof FormData ? 'multipart/form-data': 'application/json'
-        },
-      });
-    }
+    // else{
+    //   request = request.clone({
+    //     setHeaders: {
+    //       // 'Content-Type': request.body instanceof FormData ? 'multipart/form-data': 'application/json'
+    //     },
+    //   });
+    // }
 
     return next.handle(request);
   }

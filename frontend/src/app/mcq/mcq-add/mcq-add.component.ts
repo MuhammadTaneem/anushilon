@@ -2,6 +2,7 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
 import * as XLSX from 'xlsx';
 import {McqService} from "../mcq.service";
+import {AuthService} from "../../auth/auth.service";
 
 @Component({
   selector: 'app-mcq-add',
@@ -13,6 +14,8 @@ import {McqService} from "../mcq.service";
 
 
 export class McqAddComponent implements OnInit {
+
+  userIsProblemSetter: boolean= true;
 
   questionImagePreviewUrl: any;
   optionOneImagePreviewUrl: any;
@@ -67,6 +70,8 @@ export class McqAddComponent implements OnInit {
 
 ngOnInit() {
     this.getConText();
+    this.userIsProblemSetter = this.authService.isProblemSetter()
+
   }
 
 
@@ -77,7 +82,7 @@ ngOnInit() {
 
   constructor(
     private mcqService: McqService,
-    private changeDetectorRef: ChangeDetectorRef
+    private authService:AuthService
   ) {}
   getConText(){
     this.mcqService.getMcqAddContext().subscribe({
@@ -237,26 +242,6 @@ ngOnInit() {
     }
   }
 
-
-  formToDictionary(): { [key: string]: any } {
-    const formValue = this.mcqForm.value;
-    const dictionary: { [key: string]: any } = {};
-
-    Object.keys(formValue).forEach((key) => {
-      // @ts-ignore
-      dictionary[key] = formValue[key] || '';
-
-    });
-
-    return dictionary;
-  }
-
-
-
-
-  readFormData(){
-
-  }
 
   onSubmit(): void {
   console.log(this.mcqForm.value);

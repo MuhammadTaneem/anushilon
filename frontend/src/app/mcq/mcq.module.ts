@@ -8,7 +8,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { McqAddComponent } from './mcq-add/mcq-add.component';
-import { ProblemSetterComponent } from './problem-setter/problem-setter.component';
+import { ProblemSetterComponent } from '../problem-setter/problem-setter.component';
 
 
 @NgModule({

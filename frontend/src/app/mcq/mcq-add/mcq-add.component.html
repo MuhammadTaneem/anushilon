@@ -263,7 +263,7 @@
       </div>
       <!--      categories end-->
       <!--      problem_setter -->
-      <div class="col-12 col-sm-6 col-md-3">
+      <div class="col-12 col-sm-6 col-md-3" *ngIf="!userIsProblemSetter">
         <mat-form-field class="full-width">
           <mat-label>Problem Setter</mat-label>
           <mat-select formControlName="problem_setter">
