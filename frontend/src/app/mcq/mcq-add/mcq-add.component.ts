@@ -3,7 +3,8 @@ import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/form
 import * as XLSX from 'xlsx';
 import {McqService} from "../mcq.service";
 import {AuthService} from "../../auth/auth.service";
-
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from "@angular/router";
 @Component({
   selector: 'app-mcq-add',
   templateUrl: './mcq-add.component.html',
@@ -65,10 +66,16 @@ export class McqAddComponent implements OnInit {
   published: new FormControl( false ),
   }, { validators: this.optionValidation });
 
+  constructor(
+    private mcqService: McqService,
+    private authService:AuthService,
+    private snackBar: MatSnackBar,
+    private router:Router
+
+) {}
 
 
-
-ngOnInit() {
+  ngOnInit() {
     this.getConText();
     this.userIsProblemSetter = this.authService.isProblemSetter()
 
@@ -80,10 +87,7 @@ ngOnInit() {
 
 
 
-  constructor(
-    private mcqService: McqService,
-    private authService:AuthService
-  ) {}
+
   getConText(){
     this.mcqService.getMcqAddContext().subscribe({
       next: (response)=>{
@@ -244,7 +248,7 @@ ngOnInit() {
 
 
   onSubmit(): void {
-  console.log(this.mcqForm.value);
+
 
     if (this.mcqForm.valid) {
 
@@ -290,17 +294,48 @@ ngOnInit() {
         formData
       ).subscribe({
         next: (response)=>{
-          console.log(response);
+          this.mcqForm.reset();
+          location.reload();
+          console.log(this.mcqForm);
+
+          this.snackBar.open('MCQ added successfully', 'Dismiss', {
+            duration: 3000, // Duration in milliseconds (3 seconds in this example)
+            panelClass: 'success-snackbar' // Custom CSS class for styling success messages
+          });
+
+
+          // this.mcqForm.markAsPristine();
+          // this.mcqForm.markAsUntouched();
+          // this.mcqForm.clearValidators();
+          // this.mcqForm.updateValueAndValidity();
+          this.questionImagePreviewUrl = null;
+          this.questionImageFile =  null;
+          this.optionOneImagePreviewUrl = null;
+          this.optionOneImageFile = null;
+          this.optionTwoImagePreviewUrl = null;
+          this.optionTwoImageFile = null;
+          this.optionThreeImagePreviewUrl = null;
+          this.optionThreeImageFile = null;
+          this.optionFourImagePreviewUrl = null;
+          this.optionFourImageFile = null;
+          this.explanationImagePreviewUrl = null;
+          this.explanationImageFile = null;
+
         },
         error: (err)=>{
-          console.log(err.error);
+          console.log(err)
+
+          this.snackBar.open(err.message, 'Dismiss', {
+            duration: 3000, // Duration in milliseconds (3 seconds in this example)
+            panelClass: 'error-snackbar' // Custom CSS class for styling error messages
+          });
           if(err.error){
 
             for (let [key, value] of Object.entries(err.error)) {
               // @ts-ignore
               this.mcqForm.controls[key].setErrors({'api_error':value});
             }
-            console.log(this.mcqForm)
+
           }
         },
         complete:()=>{}

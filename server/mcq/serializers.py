@@ -3,28 +3,35 @@ from rest_framework import serializers
 from mcq.models import MCQ
 
 
-# class MCQSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = MCQ
-#         fields = '__all__'
-#
-#     def validate(self, attrs):
-#         if not attrs.get('option_text_1') and not attrs.get('option_img_url_1'):
-#             raise serializers.ValidationError("Either option_text_1 or option_img_url_1 is required.")
-#         elif not attrs.get('option_text_2') and not attrs.get('option_img_url_2'):
-#             raise serializers.ValidationError("Either option_text_2 or option_img_url_2 is required.")
-#         elif not attrs.get('option_text_3') and not attrs.get('option_img_url_3'):
-#             raise serializers.ValidationError("Either option_text_3 or option_img_url_3 is required.")
-#         elif not attrs.get('option_text_4') and not attrs.get('option_img_url_4'):
-#             raise serializers.ValidationError("Either option_text_4 or option_img_url_4 is required.")
-#
-#         return attrs
-
-
 class MCQSerializer(serializers.ModelSerializer):
     class Meta:
         model = MCQ
-        fields = '__all__'
+        fields = (
+            'id',
+            'question',
+            'question_img',
+            'option_text_1',
+            'option_img_1',
+            'option_text_2',
+            'option_img_2',
+            'option_text_3',
+            'option_img_3',
+            'option_text_4',
+            'option_img_4',
+            'correct_ans',
+            'explanation',
+            'explanation_img',
+            'hardness',
+            'categories',
+            'subject',
+            'chapter',
+            'problem_setter',
+            'verified',
+            'published',
+            'create_date',
+            'last_edit',
+            'problem_setter_name',  # Include the problem_setter_name field in the serializer
+        )
 
     def validate(self, attrs):
         errors = {}

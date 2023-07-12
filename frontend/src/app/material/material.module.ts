@@ -12,6 +12,8 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatSelectModule} from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 let module_list=[
   CommonModule,
   MatCardModule,
@@ -25,7 +27,8 @@ let module_list=[
   ReactiveFormsModule,
   MatSlideToggleModule,
   MatGridListModule,
-  MatSelectModule
+  MatSelectModule,
+  MatSnackBarModule,
 ];
 
 @NgModule({

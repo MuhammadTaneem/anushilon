@@ -24,3 +24,9 @@ class MCQ(models.Model):
     published = models.BooleanField(default=False)
     create_date = models.DateTimeField(auto_now_add=True)
     last_edit = models.DateTimeField(auto_now=True)
+
+    @property
+    def problem_setter_name(self):
+        if self.problem_setter:
+            return self.problem_setter.full_name
+        return None

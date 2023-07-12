@@ -9,13 +9,15 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { McqAddComponent } from './mcq-add/mcq-add.component';
 import { ProblemSetterComponent } from '../problem-setter/problem-setter.component';
+import { MaqDetailsComponent } from './mac-details/maq-details.component';
 
 
 @NgModule({
   declarations: [
     McqComponent,
     McqAddComponent,
-    ProblemSetterComponent
+    ProblemSetterComponent,
+    MaqDetailsComponent
   ],
   imports: [
     CommonModule,
