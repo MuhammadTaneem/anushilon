@@ -1,10 +1,7 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import { MatTable } from '@angular/material/table';
-import {MatPaginator, PageEvent} from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import {MCQType} from "./mcq.model";
+import {Component, OnInit} from '@angular/core';
+import {PageEvent} from '@angular/material/paginator';
 import {McqService} from "./mcq.service";
-import {from} from "rxjs";
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-mcq',
@@ -12,14 +9,26 @@ import {from} from "rxjs";
   styleUrls: ['./mcq.component.css']
 })
 export class McqComponent implements  OnInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatTable) table!: MatTable<MCQType>;
   mcqDataList: any;
+  isFilterFormOpen:boolean=false;
+  subjects :any;
+  category :any;
+  hardness :any;
+  problem_setter:any;
+  selectedSubject:any;
+  id:any;
   count:number = 0;
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
+  queryParams: { [key: string]: any } = {};
   displayedColumns = ['id','question','subject','chapter','published','details'];
-
+  filterForm = new FormGroup({
+    subject: new FormControl(),
+    chapter: new FormControl({ value: null,disabled: true }),
+    hardness: new FormControl(), // Add Validators.required
+    categories: new FormControl(),
+    problem_setter: new FormControl(),
+    verified: new FormControl(  ),
+    published: new FormControl(  ),
+  });
   constructor(
     private mcqService:McqService
 
@@ -30,6 +39,59 @@ export class McqComponent implements  OnInit {
   }
 
 
+  toggleFilter(){
+    this.isFilterFormOpen = !this.isFilterFormOpen;
+    if(this.isFilterFormOpen){
+    this.getConText();
+    }
+  }
+
+  onSubmitFilter(){
+    Object.keys(this.filterForm.controls).forEach((key:string) => {
+      const control = this.filterForm.get(key);
+      if (control!.value) {
+        this.queryParams[key] = control!.value;
+      }
+    });
+    console.log(this.queryParams);
+    this.loadMcqList();
+    this.toggleFilter();
+  }
+  clearFilterData(){
+      this.filterForm.reset();
+      this.queryParams = {};
+  }
+
+  getConText(){
+    this.mcqService.getMcqAddContext().subscribe({
+      next: (response)=>{
+        this.subjects = Object.values(response.data.subject);
+        this.category = response.data.category;
+        this.hardness = response.data.hardness;
+        this.problem_setter = response.data.problem_setter;
+      },
+      error: (err)=>{
+        console.log(err.status_code);
+        console.log(err.error);
+        console.log(err.error.status);
+        console.log(err.error.errors);
+        console.log(err.error.message);
+      },
+      complete:()=>{}
+    });
+  }
+
+
+  selectSubjectChange(event:any){
+    // @ts-ignore
+    this.selectedSubject = this.subjects.find(subject=> subject.name === event.value);
+    this.selectedSubject = this.selectedSubject.chapters;
+    if (this.selectedSubject) {
+      this.filterForm.get('chapter')?.enable();
+    } else {
+      this.filterForm.get('chapter')?.disable();
+    }
+  }
 
 
   onToggleChange(event: any,mcq:any) {
@@ -47,6 +109,8 @@ export class McqComponent implements  OnInit {
     formData.delete('option_img_4')
     formData.delete('question_img')
     formData.delete('explanation_img')
+    formData.delete('problem_setter')
+    // console.log(formData);
     this.mcqService.updateMcq(formData,mcq.id).subscribe({
       next: (response)=>{
         console.log(response)
@@ -61,7 +125,7 @@ export class McqComponent implements  OnInit {
 
 
   loadMcqList(limit=25, offset =0){
-    this.mcqService.getMcqList(limit,offset).subscribe({
+    this.mcqService.getMcqList(limit,offset,this.queryParams).subscribe({
       next: (response)=>{
         console.log(response.results);
         console.log(response.count);

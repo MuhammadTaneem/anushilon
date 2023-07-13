@@ -1,10 +1,11 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
 import * as XLSX from 'xlsx';
 import {McqService} from "../mcq.service";
 import {AuthService} from "../../auth/auth.service";
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {parseJson} from "@angular/cli/src/utilities/json-file";
 @Component({
   selector: 'app-mcq-add',
   templateUrl: './mcq-add.component.html',
@@ -16,6 +17,8 @@ import {Router} from "@angular/router";
 
 export class McqAddComponent implements OnInit {
 
+  editMode = false;
+  loading: boolean = true;
   userIsProblemSetter: boolean= true;
 
   questionImagePreviewUrl: any;
@@ -38,6 +41,7 @@ export class McqAddComponent implements OnInit {
   category :any;
   hardness :any;
   problem_setter:any;
+  id:any;
 
 
 
@@ -60,17 +64,19 @@ export class McqAddComponent implements OnInit {
   hardness: new FormControl(null, Validators.required), // Add Validators.required
   categories: new FormControl(null,Validators.required),
   subject: new FormControl(null,Validators.required),
-  chapter: new FormControl({ value: null, disabled: true }),
+  chapter: new FormControl({ value: null,disabled: true }),
   problem_setter: new FormControl(),
   verified: new FormControl( false ),
   published: new FormControl( false ),
-  }, { validators: this.optionValidation });
+  // }, { validators: this.optionValidation });
+  }, );
 
   constructor(
     private mcqService: McqService,
     private authService:AuthService,
     private snackBar: MatSnackBar,
-    private router:Router
+    private router:Router,
+    private route: ActivatedRoute
 
 ) {}
 
@@ -78,7 +84,13 @@ export class McqAddComponent implements OnInit {
   ngOnInit() {
     this.getConText();
     this.userIsProblemSetter = this.authService.isProblemSetter()
-
+    this.route.queryParamMap.subscribe(params => {
+      if (params.has('id')) {
+        this.id = params.get('id');
+        this.editMode =true;
+        this.editModeDataSet();
+      }
+    });
   }
 
 
@@ -162,7 +174,6 @@ export class McqAddComponent implements OnInit {
       this.readExcelData(file);
     }
   }
-
   readExcelData(file: File): void {
     const fileReader = new FileReader();
     fileReader.onload = (e: any) => {
@@ -175,7 +186,6 @@ export class McqAddComponent implements OnInit {
     };
     fileReader.readAsBinaryString(file);
   }
-
   onImageChange(formControlName: string, event: any) {
     if (event.target.files && event.target.files.length) {
       const file = event.target.files[0];
@@ -190,18 +200,24 @@ export class McqAddComponent implements OnInit {
           case 'option_1':
             this.optionOneImagePreviewUrl = e.target.result;
             this.optionOneImageFile = file;
+            this.mcqForm.controls.option_text_1.setErrors(null);
             break;
           case 'option_2':
             this.optionTwoImagePreviewUrl = e.target.result;
             this.optionTwoImageFile = file;
+            this.mcqForm.controls.option_text_2.setErrors(null);
             break;
           case 'option_3':
             this.optionThreeImagePreviewUrl = e.target.result;
             this.optionThreeImageFile=file;
+            this.mcqForm.controls.option_text_3.setErrors(null);
+
             break;
           case 'option_4':
             this.optionFourImagePreviewUrl = e.target.result;
             this.optionFourImageFile = file;
+            this.mcqForm.controls.option_text_4.setErrors(null);
+
             break;
           case 'explanation':
             this.explanationImagePreviewUrl = e.target.result;
@@ -214,7 +230,6 @@ export class McqAddComponent implements OnInit {
       reader.readAsDataURL(file);
     }
   }
-
   cancelImage(formControlName: string,){
     switch (formControlName) {
       case 'question':
@@ -247,15 +262,62 @@ export class McqAddComponent implements OnInit {
   }
 
 
+  editModeDataSet(){
+    this.mcqService.getMcq(this.id).subscribe({
+      next: (response)=>{
+        // console.log(response);
+        // console.log(this.questionImagePreviewUrl);
+        // console.log(response.question_img);
+        this.questionImagePreviewUrl =response.question_img;
+        this.optionOneImagePreviewUrl =response.option_img_1;
+        this.optionTwoImagePreviewUrl =response.option_img_2;
+        this.optionThreeImagePreviewUrl =response.option_img_3;
+        this.optionFourImagePreviewUrl =response.option_img_4;
+        this.explanationImagePreviewUrl  =response.explanation_img;
+        response.question_img= null;
+        response.option_img_1= null;
+        response.option_img_2= null;
+        response.option_img_3= null;
+        response.option_img_4= null;
+        response.explanation_img= null;
+        if(response.subject){
+        this.mcqForm.get('chapter')?.enable();
+          // @ts-ignore
+          this.selectedSubject = this.subjects.find(subject=> subject.name === response.subject);
+          this.selectedSubject = this.selectedSubject.chapters;
+        }
+        this.mcqForm.patchValue(response);
+      },
+      error: (err)=>{
+        this.snackBar.open(err.message, 'Dismiss', {
+          duration: 3000, // Duration in milliseconds (3 seconds in this example)
+          panelClass: 'error-snackbar' // Custom CSS class for styling error messages
+        });
+      },
+    })
+  }
+
+
+
+  clearFileUrl(){
+    this.questionImagePreviewUrl = null;
+    this.questionImageFile =  null;
+    this.optionOneImagePreviewUrl = null;
+    this.optionOneImageFile = null;
+    this.optionTwoImagePreviewUrl = null;
+    this.optionTwoImageFile = null;
+    this.optionThreeImagePreviewUrl = null;
+    this.optionThreeImageFile = null;
+    this.optionFourImagePreviewUrl = null;
+    this.optionFourImageFile = null;
+    this.explanationImagePreviewUrl = null;
+    this.explanationImageFile = null;
+  }
+
   onSubmit(): void {
-
-
     if (this.mcqForm.valid) {
 
-
-      // let formData = this.mcqForm.value;
       let formData:FormData = new FormData()
-
 
       formData.append('question', this.mcqForm.value.question || '');
       formData.append('option_text_1', this.mcqForm.value.option_text_1 || '');
@@ -269,8 +331,30 @@ export class McqAddComponent implements OnInit {
       formData.append('hardness', this.mcqForm.value.hardness || '');
       formData.append('categories', this.mcqForm.value.categories || '');
       formData.append('problem_setter', this.mcqForm.value.problem_setter || '');
-      // formData.append('verified',  this.mcqForm.value.verified);
-      // formData.append('published', this.mcqForm.value.problem_setter);
+      formData.append('verified',  this.mcqForm.value.verified!.toString());
+      formData.append('published', this.mcqForm.value.published!.toString());
+
+      if(this.editMode){
+        if(this.questionImagePreviewUrl == null){
+          formData.append('question_img','');
+        }
+        if(this.optionOneImagePreviewUrl == null){
+          formData.append('option_img_1','');
+        }
+        if(this.optionTwoImagePreviewUrl == null){
+          formData.append('option_img_2','');
+        }
+        if(this.optionThreeImagePreviewUrl == null){
+          formData.append('option_img_3','');
+        }
+        if(this.optionFourImagePreviewUrl == null){
+          formData.append('option_img_4','');
+        }
+        if(this.explanationImagePreviewUrl == null){
+          formData.append('explanation_img','');
+        }
+      }
+
       if(this.questionImageFile){
       formData.append('question_img', this.questionImageFile);
       }
@@ -290,59 +374,74 @@ export class McqAddComponent implements OnInit {
       formData.append('explanation_img', this.explanationImageFile);
       }
 
-      this.mcqService.addNewMcq(
-        formData
-      ).subscribe({
-        next: (response)=>{
-          this.mcqForm.reset();
-          location.reload();
-          console.log(this.mcqForm);
-
-          this.snackBar.open('MCQ added successfully', 'Dismiss', {
-            duration: 3000, // Duration in milliseconds (3 seconds in this example)
-            panelClass: 'success-snackbar' // Custom CSS class for styling success messages
-          });
 
 
-          // this.mcqForm.markAsPristine();
-          // this.mcqForm.markAsUntouched();
-          // this.mcqForm.clearValidators();
-          // this.mcqForm.updateValueAndValidity();
-          this.questionImagePreviewUrl = null;
-          this.questionImageFile =  null;
-          this.optionOneImagePreviewUrl = null;
-          this.optionOneImageFile = null;
-          this.optionTwoImagePreviewUrl = null;
-          this.optionTwoImageFile = null;
-          this.optionThreeImagePreviewUrl = null;
-          this.optionThreeImageFile = null;
-          this.optionFourImagePreviewUrl = null;
-          this.optionFourImageFile = null;
-          this.explanationImagePreviewUrl = null;
-          this.explanationImageFile = null;
+      if(this.editMode){
+        this.mcqService.updateMcq(formData,this.id).subscribe({
+          next: (response)=>{
+            this.mcqForm.reset();
+            location.reload();
+            this.snackBar.open('MCQ updated successfully', 'Dismiss', {
+              duration: 3000, // Duration in milliseconds (3 seconds in this example)
+              panelClass: 'success-snackbar' // Custom CSS class for styling success messages
+            });
+            this.clearFileUrl();
+          },
+          error: (err)=>{
+            console.log(err)
 
-        },
-        error: (err)=>{
-          console.log(err)
+            this.snackBar.open(err.message, 'Dismiss', {
+              duration: 3000, // Duration in milliseconds (3 seconds in this example)
+              panelClass: 'error-snackbar' // Custom CSS class for styling error messages
+            });
+            if(err.error){
 
-          this.snackBar.open(err.message, 'Dismiss', {
-            duration: 3000, // Duration in milliseconds (3 seconds in this example)
-            panelClass: 'error-snackbar' // Custom CSS class for styling error messages
-          });
-          if(err.error){
+              for (let [key, value] of Object.entries(err.error)) {
+                // @ts-ignore
+                this.mcqForm.controls[key].setErrors({'api_error':value});
+              }
 
-            for (let [key, value] of Object.entries(err.error)) {
-              // @ts-ignore
-              this.mcqForm.controls[key].setErrors({'api_error':value});
             }
+          },
+          complete:()=>{}
+        })
+      }
+      else{
+        this.mcqService.addNewMcq(
+          formData
+        ).subscribe({
+          next: (response)=>{
+            this.mcqForm.reset();
+            location.reload();
+            this.snackBar.open('MCQ added successfully', 'Dismiss', {
+              duration: 3000, // Duration in milliseconds (3 seconds in this example)
+              panelClass: 'success-snackbar' // Custom CSS class for styling success messages
+            });
+            this.clearFileUrl();
+          },
+          error: (err)=>{
+            console.log(err)
 
-          }
-        },
-        complete:()=>{}
-      });
+            this.snackBar.open(err.message, 'Dismiss', {
+              duration: 3000, // Duration in milliseconds (3 seconds in this example)
+              panelClass: 'error-snackbar' // Custom CSS class for styling error messages
+            });
+            if(err.error){
+
+              for (let [key, value] of Object.entries(err.error)) {
+                // @ts-ignore
+                this.mcqForm.controls[key].setErrors({'api_error':value});
+              }
+
+            }
+          },
+          complete:()=>{}
+        });
+      }
 
     } else {
       console.log("Please fill in all required fields.");
+      // location.reload();
     }
   }
 

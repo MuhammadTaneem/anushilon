@@ -23,8 +23,17 @@ export class McqService {
    return  this.http.get<any>(this.BACKEND_URL+'context/',);
   }
 
-  getMcqList(limit=10,offset=0){
-    return  this.http.get<any>(this.BACKEND_URL+`?limit=${limit}&offset=${offset}`);
+  getMcqList(limit=10,offset=0, queryParamsDict: { [key: string]: any } ){
+    let url =this.BACKEND_URL+`?limit=${limit}&offset=${offset}`;
+    if (queryParamsDict) {
+      for (const key in queryParamsDict) {
+        if (queryParamsDict.hasOwnProperty(key)) {
+          const value = queryParamsDict[key];
+          url += `&${key}=${value}`;
+        }
+      }
+    }
+    return  this.http.get<any>(url);
   }
 
   getMcq(id:number){

@@ -11,10 +11,8 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class MaqDetailsComponent implements OnInit {
   question: any;
-  showVerified: boolean = true;
   loading: boolean = true;
-  showPublished: boolean = true;
-  showExplanation: boolean = false;
+
 
 
   constructor(

@@ -10,7 +10,7 @@ from .models import MCQ
 from .serializers import MCQSerializer
 from custom_user.models import CustomUser
 from django.http import JsonResponse
-
+from django.contrib.auth import get_user
 
 class MCQView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = MCQ.objects.all()
@@ -18,8 +18,8 @@ class MCQView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAP
     serializer_class = MCQSerializer
     authentication_classes = [BasicAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
-    # parser_classes = [MultiPartParser]
-    lookup_field = ['id']
+    parser_classes = [MultiPartParser]
+    # lookup_field = ['id']
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -43,6 +43,14 @@ class MCQView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAP
         if category:
             queryset = queryset.filter(categories=category)
 
+        verified = self.request.query_params.get('verified')
+        if verified:
+            queryset = queryset.filter(verified=verified)
+
+        published = self.request.query_params.get('published')
+        if published:
+            queryset = queryset.filter(published=published)
+
         q = self.request.query_params.get('q')
         if q:
             q = q.strip().lower()
@@ -54,11 +62,6 @@ class MCQView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAP
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        problem_setter = request.data.get('problem_setter')
-        if not problem_setter:
-            mutable_data = request.data.copy()  # Create a mutable copy of request.data
-            mutable_data['problem_setter'] = request.user.id
-            request._data = mutable_data  # Update request._data with the modified copy
         return self.create(request, *args, **kwargs)
 
 
@@ -74,9 +77,6 @@ class MCQUpdateView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, generics
 
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
-
-
-
 
 @require_GET
 def get_mcq_add_context(request):

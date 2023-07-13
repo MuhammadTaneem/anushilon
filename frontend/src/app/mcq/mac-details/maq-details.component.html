@@ -1,9 +1,35 @@
-<h2>MCQ Question</h2>
 
 
   <div class="question-card p-1" *ngIf="!loading">
 
+    <div class="container-fluid --bs-white">
+      <div class="row">
+        <div class="col">
+          <button mat-icon-button [routerLink]="['/mcq']">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+        </div>
+
+        <div class="col p-2 d-flex justify-content-end">
+
+          <button mat-icon-button [routerLink]="['/mcq/add/']" [queryParams]="{id: question.id}">
+            <mat-icon  >edit</mat-icon>
+          </button>
+
+          <!--          <button mat-raised-button color="primary" (click)="uploadExel.click()"> <mat-icon>grid_on</mat-icon>Upload Excel</button>-->
+<!--          <input #uploadExel  class="d-none" type="file" (change)="onExcelUpload($event)" accept=".xlsx, .xls">-->
+
+        </div>
+      </div>
+
+    </div>
+
+
     <div class="container-fluid">
+
+      <div class="row">
+
+      </div>
       <div class="row">
         <div class="col-12 col-sm-6">
           <h3>question:{{ question.question }}</h3>

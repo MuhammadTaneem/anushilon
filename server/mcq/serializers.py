@@ -34,21 +34,24 @@ class MCQSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, attrs):
-        errors = {}
+        if not attrs.get('problem_setter'):
+            attrs['problem_setter'] = self.context['request'].user
 
-        if not attrs.get('option_text_1') and not attrs.get('option_img_1'):
-            errors['option_text_1'] = "Text or Image is required."
-
-        if not attrs.get('option_text_2') and not attrs.get('option_img_2'):
-            errors['option_text_2'] = "Text or Image is required."
-
-        if not attrs.get('option_text_3') and not attrs.get('option_img_3'):
-            errors['option_text_3'] = "Text or Image is required."
-
-        if not attrs.get('option_text_4') and not attrs.get('option_img_4'):
-            errors['option_text_4'] = "Text or Image is required."
-
-        if errors:
-            raise serializers.ValidationError(errors)
+        # errors = {}
+        #
+        # if not attrs.get('option_text_1') and not attrs.get('option_img_1'):
+        #     errors['option_text_1'] = "Text or Image is required."
+        #
+        # if not attrs.get('option_text_2') and not attrs.get('option_img_2'):
+        #     errors['option_text_2'] = "Text or Image is required."
+        #
+        # if not attrs.get('option_text_3') and not attrs.get('option_img_3'):
+        #     errors['option_text_3'] = "Text or Image is required."
+        #
+        # if not attrs.get('option_text_4') and not attrs.get('option_img_4'):
+        #     errors['option_text_4'] = "Text or Image is required."
+        #
+        # if errors:
+        #     raise serializers.ValidationError(errors)
 
         return attrs
