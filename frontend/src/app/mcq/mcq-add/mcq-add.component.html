@@ -8,9 +8,13 @@
 
     <div class="col p-2 d-flex justify-content-end" *ngIf="!editMode">
 
-      <button mat-raised-button color="primary" (click)="uploadExel.click()">
+      <button *ngIf="!excelJsonData" mat-raised-button color="primary" (click)="uploadExel.click()">
         <mat-icon>grid_on</mat-icon>
         Upload Excel
+      </button>
+      <button *ngIf="excelJsonData" mat-raised-button color="primary" (click)="cancelExcelFileData()">
+        <mat-icon>close</mat-icon>
+        Cancel Excel
       </button>
       <input #uploadExel class="d-none" type="file" (change)="readExcelData($event)" accept=".xlsx, .xls">
 
@@ -25,38 +29,93 @@
 
 <ng-container *ngIf="excelJsonData">
   <h2>hi excel data here</h2>
-  <table mat-table class="full-width-table" aria-label="Elements" [dataSource]="excelJsonData">
-    <!-- Id Column -->
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef>ID</th>
-      <td mat-cell *matCellDef="let row" >{{row.question}}</td>
-    </ng-container>
+  <div class="table-container">
+    <table mat-table class="full-width-table m-1" aria-label="Elements" [dataSource]="excelJsonData">
 
 
     <ng-container matColumnDef="question">
-      <th mat-header-cell *matHeaderCellDef>question</th>
+      <th mat-header-cell *matHeaderCellDef>Question</th>
       <td mat-cell  *matCellDef="let row; let i = index" [ngStyle]="{ 'background-color': excelDataUploadStatus[i] }">{{row.question}}</td>
     </ng-container>
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>Serial</th>
+        <td mat-cell  *matCellDef="let row; let i = index" [ngStyle]="{ 'background-color': excelDataUploadStatus[i] }">{{row.question}}</td>
+      </ng-container>
+
+
 
     <!-- Name Column -->
     <ng-container matColumnDef="subject">
-      <th mat-header-cell *matHeaderCellDef>subject</th>
-      <td mat-cell *matCellDef="let row">{{row.subject}}</td>
+      <th mat-header-cell *matHeaderCellDef>Subject</th>
+      <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="{ 'background-color': excelDataUploadStatus[i] }">{{row.subject}}</td>
     </ng-container>
 
     <ng-container matColumnDef="chapter">
-      <th mat-header-cell *matHeaderCellDef>chapter</th>
-      <td mat-cell *matCellDef="let row">{{row.chapter}}</td>
+      <th mat-header-cell *matHeaderCellDef>Chapter</th>
+      <td mat-cell *matCellDef="let row;let i = index" [ngStyle]="{ 'background-color': excelDataUploadStatus[i] }">{{row.chapter}}</td>
     </ng-container>
+
+
+    <ng-container matColumnDef="option_text_1">
+      <th mat-header-cell *matHeaderCellDef>Option 1</th>
+      <td mat-cell *matCellDef="let row;let i = index" [ngStyle]="{ 'background-color': excelDataUploadStatus[i] }">{{row.option_text_1}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="option_text_2">
+      <th mat-header-cell *matHeaderCellDef>Option 2</th>
+      <td mat-cell *matCellDef="let row;let i = index" [ngStyle]="{ 'background-color': excelDataUploadStatus[i] }">{{row.option_text_2}}</td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="option_text_3">
+      <th mat-header-cell *matHeaderCellDef>Option 3</th>
+      <td mat-cell *matCellDef="let row;let i = index" [ngStyle]="{ 'background-color': excelDataUploadStatus[i] }">{{row.option_text_3}}</td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="option_text_4">
+      <th mat-header-cell *matHeaderCellDef>Option 4</th>
+      <td mat-cell *matCellDef="let row;let i = index" [ngStyle]="{ 'background-color': excelDataUploadStatus[i] }">{{row.option_text_4}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="correct_ans">
+      <th mat-header-cell *matHeaderCellDef>Correct Option</th>
+      <td mat-cell *matCellDef="let row;let i = index" [ngStyle]="{ 'background-color': excelDataUploadStatus[i] }">{{row.correct_ans}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="explanation">
+      <th mat-header-cell *matHeaderCellDef>Explanation</th>
+      <td mat-cell *matCellDef="let row;let i = index" [ngStyle]="{ 'background-color': excelDataUploadStatus[i] }">{{row.explanation}}</td>
+    </ng-container>
+    <ng-container matColumnDef="categories">
+      <th mat-header-cell *matHeaderCellDef>Categories</th>
+      <td mat-cell *matCellDef="let row;let i = index" [ngStyle]="{ 'background-color': excelDataUploadStatus[i] }">{{row.categories}}</td>
+    </ng-container>
+    <ng-container matColumnDef="hardness">
+      <th mat-header-cell *matHeaderCellDef>Hardness</th>
+      <td mat-cell *matCellDef="let row;let i = index" [ngStyle]="{ 'background-color': excelDataUploadStatus[i] }">{{row.hardness}}</td>
+    </ng-container>
+
+
+
+
+
 
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+    <div class="row mb-5  mt-4">
+      <div class="col d-flex justify-content-center">
+        <button mat-raised-button color="primary" type="button" (click)="uploadExcelFileData()">Submit</button>
+      </div>
+    </div>
+
+  </div>
 </ng-container>
 
 
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="!excelJsonData" >
   <form [formGroup]="mcqForm" (ngSubmit)="onSubmit()" class="form">
 
     <!--    question-->

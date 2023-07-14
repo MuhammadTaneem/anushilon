@@ -44,7 +44,8 @@ export class McqAddComponent implements OnInit {
   hardness :any;
   problem_setter:any;
   id:any;
-  displayedColumns = ['question','subject','chapter',];
+  displayedColumns = ['question','subject','chapter','categories','hardness','option_text_1','option_text_2',
+  'option_text_3','option_text_4','correct_ans','explanation'];
 
 
 
@@ -187,9 +188,9 @@ export class McqAddComponent implements OnInit {
         this.excelJsonData =jsonData;
 
         for (let i = 0; i < jsonData.length; i++) {
-          this.excelDataUploadStatus.push('green');
+          this.excelDataUploadStatus.push('MintCream');
         }
-        this.excelDataUploadStatus[2]='red';
+
         console.log(jsonData);
       };
       fileReader.readAsBinaryString(file);
@@ -198,8 +199,68 @@ export class McqAddComponent implements OnInit {
   }
 
 
+  cancelExcelFileData(){
+    this.excelJsonData=null;
+    this.excelDataUploadStatus =[];
+    location.reload();
 
+  }
   uploadExcelFileData(){
+
+    for (const [index, row] of this.excelJsonData.entries()) {
+      // console.log(index, row);
+      let formData:FormData = new FormData()
+
+      formData.append('question', row.question || '');
+      formData.append('option_text_1', row.option_text_1 || '');
+      formData.append('option_text_2', row.option_text_2 || '');
+      formData.append('option_text_3', row.option_text_3 || '');
+      formData.append('option_text_4', row.option_text_4 || '');
+      formData.append('correct_ans', row.correct_ans || '');
+      formData.append('explanation', row.explanation || '');
+      formData.append('subject', row.subject || '');
+      formData.append('chapter', row.chapter || '');
+      formData.append('hardness', row.hardness || '');
+      formData.append('categories', row.categories || '');
+      // formData.append('problem_setter', problem_setter || '');
+
+      // console.log(formData);
+
+      // formData.forEach((value, key) => {
+      //   console.log(`${key}: ${value}`);
+      // });
+      this.excelDataUploadStatus[index]='SpringGreen';
+      this.mcqService.addNewMcq(
+        formData
+      ).subscribe({
+        next: (response)=>{
+          this.excelDataUploadStatus[index]='Turquoise';
+
+          this.snackBar.open('MCQ added successfully', 'Dismiss', {
+            duration: 3000, // Duration in milliseconds (3 seconds in this example)
+            panelClass: 'success-snackbar' // Custom CSS class for styling success messages
+          });
+          this.clearFileUrl();
+        },
+        error: (err)=>{
+          console.log(err)
+          this.excelDataUploadStatus[index]='Salmon';
+
+
+          this.snackBar.open(err.message, 'Dismiss', {
+            duration: 3000, // Duration in milliseconds (3 seconds in this example)
+            panelClass: 'error-snackbar' // Custom CSS class for styling error messages
+          });
+        },
+        complete:()=>{}
+      });
+
+
+
+    }
+
+    // this.excelJsonData.clear;
+    // this.excelDataUploadStatus=[];
 
   }
   onImageChange(formControlName: string, event: any) {
@@ -453,12 +514,19 @@ export class McqAddComponent implements OnInit {
           },
           complete:()=>{}
         });
+
       }
 
     } else {
       console.log("Please fill in all required fields.");
       // location.reload();
     }
+  }
+
+
+  formUpload(formData:FormData){
+
+
   }
 
 }

@@ -5,3 +5,12 @@
 .max_width{
   max-width: 300px;
 }
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.full-width-table {
+  width: max-content;
+}
+
