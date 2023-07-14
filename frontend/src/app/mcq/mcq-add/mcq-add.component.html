@@ -8,8 +8,11 @@
 
     <div class="col p-2 d-flex justify-content-end" *ngIf="!editMode">
 
-      <button mat-raised-button color="primary" (click)="uploadExel.click()"> <mat-icon>grid_on</mat-icon>Upload Excel</button>
-      <input #uploadExel  class="d-none" type="file" (change)="onExcelUpload($event)" accept=".xlsx, .xls">
+      <button mat-raised-button color="primary" (click)="uploadExel.click()">
+        <mat-icon>grid_on</mat-icon>
+        Upload Excel
+      </button>
+      <input #uploadExel class="d-none" type="file" (change)="readExcelData($event)" accept=".xlsx, .xls">
 
     </div>
   </div>
@@ -18,10 +21,45 @@
 
 
 <!--=======================-->
+
+
+<ng-container *ngIf="excelJsonData">
+  <h2>hi excel data here</h2>
+  <table mat-table class="full-width-table" aria-label="Elements" [dataSource]="excelJsonData">
+    <!-- Id Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let row" >{{row.question}}</td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="question">
+      <th mat-header-cell *matHeaderCellDef>question</th>
+      <td mat-cell  *matCellDef="let row; let i = index" [ngStyle]="{ 'background-color': excelDataUploadStatus[i] }">{{row.question}}</td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="subject">
+      <th mat-header-cell *matHeaderCellDef>subject</th>
+      <td mat-cell *matCellDef="let row">{{row.subject}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="chapter">
+      <th mat-header-cell *matHeaderCellDef>chapter</th>
+      <td mat-cell *matCellDef="let row">{{row.chapter}}</td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</ng-container>
+
+
 <div class="container-fluid">
   <form [formGroup]="mcqForm" (ngSubmit)="onSubmit()" class="form">
 
-<!--    question-->
+    <!--    question-->
 
     <div class="row">
       <div class="col">
@@ -31,20 +69,27 @@
           <mat-error *ngIf="mcqForm.controls.question.invalid">
             <span *ngIf="mcqForm.controls.question.errors?.['required']">Question is required.</span>
           </mat-error>
-          <button matSuffix type="button"  *ngIf="!questionImagePreviewUrl" mat-icon-button color="primary" (click)="qImageInput.click()"> <mat-icon>image</mat-icon></button>
-          <button matSuffix type="button" *ngIf="questionImagePreviewUrl" mat-icon-button color="primary" (click)="cancelImage('question')"> <mat-icon>close</mat-icon></button>
+          <button matSuffix type="button" *ngIf="!questionImagePreviewUrl" mat-icon-button color="primary"
+                  (click)="qImageInput.click()">
+            <mat-icon>image</mat-icon>
+          </button>
+          <button matSuffix type="button" *ngIf="questionImagePreviewUrl" mat-icon-button color="primary"
+                  (click)="cancelImage('question')">
+            <mat-icon>close</mat-icon>
+          </button>
         </mat-form-field>
         <span *ngIf="mcqForm.controls.question.errors">{{mcqForm.controls.question.errors['api_error'] }}</span>
 
       </div>
       <div class="col-12 col-md-3" *ngIf="questionImagePreviewUrl">
-        <img  [src]="questionImagePreviewUrl" alt="Image Preview" [style.height.px]=150  class="full-width max_width">
+        <img [src]="questionImagePreviewUrl" alt="Image Preview" [style.height.px]=150 class="full-width max_width">
       </div>
-      <input #qImageInput type="file" formControlName="question_img" class="d-none" (change)="onImageChange('question', $event)" accept="image/*">
+      <input #qImageInput type="file" formControlName="question_img" class="d-none"
+             (change)="onImageChange('question', $event)" accept="image/*">
     </div>
 
 
-<!--    options-->
+    <!--    options-->
 
 
     <div class="row">
@@ -58,16 +103,24 @@
               <span *ngIf="mcqForm.controls.option_text_1.errors?.['required']">Option 1 is required.</span>
             </mat-error>
 
-            <button matSuffix  type="button" *ngIf="!optionOneImagePreviewUrl" mat-icon-button color="primary" (click)="optionOneImageInput.click()"> <mat-icon>image</mat-icon></button>
-            <button matSuffix type="button" *ngIf="optionOneImagePreviewUrl" mat-icon-button color="primary" (click)="cancelImage('option_1')"> <mat-icon>close</mat-icon></button>
+            <button matSuffix type="button" *ngIf="!optionOneImagePreviewUrl" mat-icon-button color="primary"
+                    (click)="optionOneImageInput.click()">
+              <mat-icon>image</mat-icon>
+            </button>
+            <button matSuffix type="button" *ngIf="optionOneImagePreviewUrl" mat-icon-button color="primary"
+                    (click)="cancelImage('option_1')">
+              <mat-icon>close</mat-icon>
+            </button>
           </mat-form-field>
-          <span *ngIf="mcqForm.controls.option_text_1.errors">{{mcqForm.controls.option_text_1.errors['api_error'] }}</span>
+          <span
+            *ngIf="mcqForm.controls.option_text_1.errors">{{mcqForm.controls.option_text_1.errors['api_error'] }}</span>
 
         </div>
-        <input #optionOneImageInput type="file" formControlName="option_img_1" class="d-none" (change)="onImageChange('option_1', $event)" accept="image/*">
+        <input #optionOneImageInput type="file" formControlName="option_img_1" class="d-none"
+               (change)="onImageChange('option_1', $event)" accept="image/*">
 
-        <div class="col"  *ngIf="optionOneImagePreviewUrl">
-          <img  [src]="optionOneImagePreviewUrl" alt="Image Preview" [style.height.px]=50  class="full-width">
+        <div class="col" *ngIf="optionOneImagePreviewUrl">
+          <img [src]="optionOneImagePreviewUrl" alt="Image Preview" [style.height.px]=50 class="full-width">
         </div>
 
       </div>
@@ -81,16 +134,24 @@
               <span *ngIf="mcqForm.controls.option_text_2.errors?.['required']">Option 2 is required.</span>
             </mat-error>
 
-            <button matSuffix type="button"  *ngIf="!optionTwoImagePreviewUrl" mat-icon-button color="primary" (click)="optionTwoImageInput.click()"> <mat-icon>image</mat-icon></button>
-            <button matSuffix type="button" *ngIf="optionTwoImagePreviewUrl" mat-icon-button color="primary" (click)="cancelImage('option_2')"> <mat-icon>close</mat-icon></button>
+            <button matSuffix type="button" *ngIf="!optionTwoImagePreviewUrl" mat-icon-button color="primary"
+                    (click)="optionTwoImageInput.click()">
+              <mat-icon>image</mat-icon>
+            </button>
+            <button matSuffix type="button" *ngIf="optionTwoImagePreviewUrl" mat-icon-button color="primary"
+                    (click)="cancelImage('option_2')">
+              <mat-icon>close</mat-icon>
+            </button>
           </mat-form-field>
-          <span *ngIf="mcqForm.controls.option_text_2.errors">{{mcqForm.controls.option_text_2.errors['api_error'] }}</span>
+          <span
+            *ngIf="mcqForm.controls.option_text_2.errors">{{mcqForm.controls.option_text_2.errors['api_error'] }}</span>
 
         </div>
-        <input #optionTwoImageInput type="file" formControlName="option_img_2" class="d-none" (change)="onImageChange('option_2', $event)" accept="image/*">
+        <input #optionTwoImageInput type="file" formControlName="option_img_2" class="d-none"
+               (change)="onImageChange('option_2', $event)" accept="image/*">
 
-        <div class="col"  *ngIf="optionTwoImagePreviewUrl">
-          <img  [src]="optionTwoImagePreviewUrl" alt="Image Preview" [style.height.px]=50  class="full-width">
+        <div class="col" *ngIf="optionTwoImagePreviewUrl">
+          <img [src]="optionTwoImagePreviewUrl" alt="Image Preview" [style.height.px]=50 class="full-width">
         </div>
 
       </div>
@@ -104,16 +165,24 @@
               <span *ngIf="mcqForm.controls.option_text_3.errors?.['required']">Option 3 is required.</span>
             </mat-error>
 
-            <button matSuffix  type="button" *ngIf="!optionThreeImagePreviewUrl" mat-icon-button color="primary" (click)="optionThreeImageInput.click()"> <mat-icon>image</mat-icon></button>
-            <button matSuffix type="button" *ngIf="optionThreeImagePreviewUrl" mat-icon-button color="primary" (click)="cancelImage('option_3')"> <mat-icon>close</mat-icon></button>
+            <button matSuffix type="button" *ngIf="!optionThreeImagePreviewUrl" mat-icon-button color="primary"
+                    (click)="optionThreeImageInput.click()">
+              <mat-icon>image</mat-icon>
+            </button>
+            <button matSuffix type="button" *ngIf="optionThreeImagePreviewUrl" mat-icon-button color="primary"
+                    (click)="cancelImage('option_3')">
+              <mat-icon>close</mat-icon>
+            </button>
           </mat-form-field>
-          <span *ngIf="mcqForm.controls.option_text_3.errors">{{mcqForm.controls.option_text_3.errors['api_error'] }}</span>
+          <span
+            *ngIf="mcqForm.controls.option_text_3.errors">{{mcqForm.controls.option_text_3.errors['api_error'] }}</span>
 
         </div>
-        <input #optionThreeImageInput type="file" formControlName="option_img_3" class="d-none" (change)="onImageChange('option_3', $event)" accept="image/*">
+        <input #optionThreeImageInput type="file" formControlName="option_img_3" class="d-none"
+               (change)="onImageChange('option_3', $event)" accept="image/*">
 
-        <div class="col"  *ngIf="optionThreeImagePreviewUrl">
-          <img  [src]="optionThreeImagePreviewUrl" alt="Image Preview" [style.height.px]=50  class="full-width">
+        <div class="col" *ngIf="optionThreeImagePreviewUrl">
+          <img [src]="optionThreeImagePreviewUrl" alt="Image Preview" [style.height.px]=50 class="full-width">
         </div>
 
       </div>
@@ -130,24 +199,32 @@
             </mat-error>
 
 
-            <button matSuffix type="button" *ngIf="!optionFourImagePreviewUrl" mat-icon-button color="primary" (click)="optionFourImageInput.click()"> <mat-icon>image</mat-icon></button>
-            <button matSuffix type="button" *ngIf="optionFourImagePreviewUrl" mat-icon-button color="primary" (click)="cancelImage('option_4')"> <mat-icon>close</mat-icon></button>
+            <button matSuffix type="button" *ngIf="!optionFourImagePreviewUrl" mat-icon-button color="primary"
+                    (click)="optionFourImageInput.click()">
+              <mat-icon>image</mat-icon>
+            </button>
+            <button matSuffix type="button" *ngIf="optionFourImagePreviewUrl" mat-icon-button color="primary"
+                    (click)="cancelImage('option_4')">
+              <mat-icon>close</mat-icon>
+            </button>
           </mat-form-field>
 
-          <span *ngIf="mcqForm.controls.option_text_4.errors">{{mcqForm.controls.option_text_4.errors['api_error'] }}</span>
+          <span
+            *ngIf="mcqForm.controls.option_text_4.errors">{{mcqForm.controls.option_text_4.errors['api_error'] }}</span>
 
         </div>
-        <input #optionFourImageInput type="file" formControlName="option_img_4" class="d-none" (change)="onImageChange('option_4', $event)" accept="image/*">
+        <input #optionFourImageInput type="file" formControlName="option_img_4" class="d-none"
+               (change)="onImageChange('option_4', $event)" accept="image/*">
 
-        <div class="col"  *ngIf="optionFourImagePreviewUrl">
-          <img  [src]="optionFourImagePreviewUrl" alt="Image Preview" [style.height.px]=50  class="full-width">
+        <div class="col" *ngIf="optionFourImagePreviewUrl">
+          <img [src]="optionFourImagePreviewUrl" alt="Image Preview" [style.height.px]=50 class="full-width">
         </div>
 
       </div>
     </div>
 
 
-<!--    currect ans-->
+    <!--    currect ans-->
 
 
     explanation
@@ -159,20 +236,27 @@
           <mat-error *ngIf="mcqForm.controls.explanation.invalid">
             <span *ngIf="mcqForm.controls.explanation.errors?.['required']">Explanation is required.</span>
           </mat-error>
-          <button matSuffix type="button"  *ngIf="!explanationImagePreviewUrl" mat-icon-button color="primary" (click)="explanationImageInput.click()"> <mat-icon>image</mat-icon></button>
-          <button matSuffix type="button" *ngIf="explanationImagePreviewUrl" mat-icon-button color="primary" (click)="cancelImage('explanation')"> <mat-icon>close</mat-icon></button>
+          <button matSuffix type="button" *ngIf="!explanationImagePreviewUrl" mat-icon-button color="primary"
+                  (click)="explanationImageInput.click()">
+            <mat-icon>image</mat-icon>
+          </button>
+          <button matSuffix type="button" *ngIf="explanationImagePreviewUrl" mat-icon-button color="primary"
+                  (click)="cancelImage('explanation')">
+            <mat-icon>close</mat-icon>
+          </button>
         </mat-form-field>
         <span *ngIf="mcqForm.controls.explanation.errors">{{mcqForm.controls.explanation.errors['api_error'] }}</span>
 
       </div>
       <div class="col-12 col-md-3" *ngIf="explanationImagePreviewUrl">
-        <img  [src]="explanationImagePreviewUrl" alt="Image Preview" [style.height.px]=130  class="full-width max_width">
+        <img [src]="explanationImagePreviewUrl" alt="Image Preview" [style.height.px]=130 class="full-width max_width">
       </div>
-      <input #explanationImageInput type="file" formControlName="explanation_img" class="d-none" (change)="onImageChange('explanation', $event)" accept="image/*">
+      <input #explanationImageInput type="file" formControlName="explanation_img" class="d-none"
+             (change)="onImageChange('explanation', $event)" accept="image/*">
     </div>
     end explation
 
-<!--    correct ans -->
+    <!--    correct ans -->
 
     <div class="row">
 
@@ -180,8 +264,8 @@
         <mat-form-field class="full-width">
           <mat-label>Correct Answer</mat-label>
           <mat-select formControlName="correct_ans">
-            <mat-option value="1">Option One </mat-option>
-            <mat-option value="2">Option Two </mat-option>
+            <mat-option value="1">Option One</mat-option>
+            <mat-option value="2">Option Two</mat-option>
             <mat-option value="3">Option Three</mat-option>
             <mat-option value="4">Option Four</mat-option>
           </mat-select>
@@ -196,7 +280,7 @@
       <!--    end correct ans-->
 
 
-<!--      subject-->
+      <!--      subject-->
       <div class="col-12 col-sm-6 col-md-3">
         <mat-form-field class="full-width">
           <mat-label>Subject</mat-label>
@@ -217,7 +301,8 @@
         <mat-form-field class="full-width">
           <mat-label>Chapter</mat-label>
           <mat-select formControlName="chapter">
-            <mat-option *ngFor="let chapter of selectedSubject|keyvalue" [value]=chapter.key>{{ chapter.value   }} </mat-option>
+            <mat-option *ngFor="let chapter of selectedSubject|keyvalue"
+                        [value]=chapter.key>{{ chapter.value   }} </mat-option>
 
           </mat-select>
           <mat-error *ngIf="mcqForm.controls.chapter.invalid">
@@ -229,7 +314,7 @@
       </div>
       <!--end chapter-->
 
-<!--      hardness-->
+      <!--      hardness-->
       <div class="col-12 col-sm-6 col-md-3">
         <mat-form-field class="full-width">
           <mat-label>Hardness</mat-label>
@@ -244,7 +329,7 @@
         <span *ngIf="mcqForm.controls.hardness.errors">{{mcqForm.controls.hardness.errors['api_error'] }}</span>
 
       </div>
-<!--      hardness end-->
+      <!--      hardness end-->
 
 
       <!--      categories -->
@@ -268,9 +353,12 @@
         <mat-form-field class="full-width">
           <mat-label>Problem Setter</mat-label>
           <mat-select formControlName="problem_setter">
-            <mat-option *ngFor="let label of problem_setter|keyvalue" [value]=label.key>{{ label.value   }} </mat-option>
-          </mat-select>        </mat-form-field>
-        <span *ngIf="mcqForm.controls.problem_setter.errors">{{mcqForm.controls.problem_setter.errors['api_error'] }}</span>
+            <mat-option *ngFor="let label of problem_setter|keyvalue"
+                        [value]=label.key>{{ label.value   }} </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <span
+          *ngIf="mcqForm.controls.problem_setter.errors">{{mcqForm.controls.problem_setter.errors['api_error'] }}</span>
 
       </div>
       <!--      problem_setter end-->
@@ -278,15 +366,11 @@
     </div>
 
 
-
-
-<div class="row mb-5  mt-4">
-<div class="col d-flex justify-content-center">
-    <button  mat-raised-button color="primary" type="submit">Submit</button>
-</div>
-</div>
-
-
+    <div class="row mb-5  mt-4">
+      <div class="col d-flex justify-content-center">
+        <button mat-raised-button color="primary" type="submit">Submit</button>
+      </div>
+    </div>
 
 
   </form>

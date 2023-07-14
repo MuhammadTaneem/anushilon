@@ -12,6 +12,7 @@ from custom_user.models import CustomUser
 from django.http import JsonResponse
 from django.contrib.auth import get_user
 
+
 class MCQView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = MCQ.objects.all()
     pagination_class = LimitOffsetPagination
@@ -19,6 +20,7 @@ class MCQView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAP
     authentication_classes = [BasicAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
     parser_classes = [MultiPartParser]
+
     # lookup_field = ['id']
 
     def get_queryset(self):
@@ -70,6 +72,7 @@ class MCQUpdateView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, generics
     serializer_class = MCQSerializer
     authentication_classes = [BasicAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
+
     # parser_classes = [MultiPartParser]
 
     def get(self, request, *args, **kwargs):
@@ -77,6 +80,7 @@ class MCQUpdateView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, generics
 
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
+
 
 @require_GET
 def get_mcq_add_context(request):
@@ -93,5 +97,5 @@ def get_mcq_add_context(request):
         return JsonResponse({'status': 200, 'message': 'context loaded', 'data': data})
 
     except Exception as e:
-        return JsonResponse({"status_code": 500, "status": 'Failed', "message": 'Internal server error', "error": str(e)}, status=500)
-
+        return JsonResponse(
+            {"status_code": 500, "status": 'Failed', "message": 'Internal server error', "error": str(e)}, status=500)

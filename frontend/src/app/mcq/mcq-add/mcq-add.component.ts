@@ -20,6 +20,8 @@ export class McqAddComponent implements OnInit {
   editMode = false;
   loading: boolean = true;
   userIsProblemSetter: boolean= true;
+  excelJsonData:any;
+  excelDataUploadStatus: string[] = [];
 
   questionImagePreviewUrl: any;
   optionOneImagePreviewUrl: any;
@@ -42,6 +44,8 @@ export class McqAddComponent implements OnInit {
   hardness :any;
   problem_setter:any;
   id:any;
+  displayedColumns = ['question','subject','chapter',];
+
 
 
 
@@ -167,24 +171,36 @@ export class McqAddComponent implements OnInit {
       this.mcqForm.get('chapter')?.disable();
     }
   }
-  onExcelUpload(event: Event): void {
+
+  readExcelData(event: Event): void {
+
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (file) {
-      this.readExcelData(file);
+      const fileReader = new FileReader();
+      fileReader.onload = (e: any) => {
+        const data = e.target.result;
+        const workbook = XLSX.read(data, { type: 'binary' });
+        const firstSheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[firstSheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        this.excelJsonData =jsonData;
+
+        for (let i = 0; i < jsonData.length; i++) {
+          this.excelDataUploadStatus.push('green');
+        }
+        this.excelDataUploadStatus[2]='red';
+        console.log(jsonData);
+      };
+      fileReader.readAsBinaryString(file);
     }
+
   }
-  readExcelData(file: File): void {
-    const fileReader = new FileReader();
-    fileReader.onload = (e: any) => {
-      const data = e.target.result;
-      const workbook = XLSX.read(data, { type: 'binary' });
-      const firstSheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[firstSheetName];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet);
-      console.log(jsonData);
-    };
-    fileReader.readAsBinaryString(file);
+
+
+
+  uploadExcelFileData(){
+
   }
   onImageChange(formControlName: string, event: any) {
     if (event.target.files && event.target.files.length) {

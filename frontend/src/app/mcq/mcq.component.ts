@@ -145,6 +145,5 @@ export class McqComponent implements  OnInit {
 
   onChangePage(pageData: PageEvent) {
     this.loadMcqList(pageData.pageSize,pageData.pageIndex *pageData.pageSize);
-
   }
 }
