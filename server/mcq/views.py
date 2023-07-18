@@ -1,16 +1,15 @@
 from django.views.decorators.http import require_GET
-from rest_framework import generics, mixins, status
+from rest_framework import generics, mixins
 from rest_framework.authentication import BasicAuthentication, TokenAuthentication
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.parsers import MultiPartParser
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
-from django.db.models import Q
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from django.db.models import Q, F
 from .enum import hardness_enum_dict, category_enum_dict, subjects_enum_dict
 from .models import MCQ
 from .serializers import MCQSerializer
 from custom_user.models import CustomUser
 from django.http import JsonResponse
-from django.contrib.auth import get_user
 
 
 class MCQView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
@@ -49,6 +48,14 @@ class MCQView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAP
         if verified:
             queryset = queryset.filter(verified=verified)
 
+        create_start_date = self.request.query_params.get('create_start_date')
+        if create_start_date:
+            queryset = queryset.filter(create_date__gte=create_start_date)
+
+        create_end_date = self.request.query_params.get('create_end_date')
+        if create_end_date:
+            queryset = queryset.filter(create_date__lte=create_end_date)
+
         published = self.request.query_params.get('published')
         if published:
             queryset = queryset.filter(published=published)
@@ -57,6 +64,7 @@ class MCQView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAP
         if q:
             q = q.strip().lower()
             queryset = queryset.filter(Q(question__icontains=q))
+        queryset = queryset.order_by('-id')
 
         return queryset
 

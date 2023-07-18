@@ -13,6 +13,7 @@ import {MaterialModule} from "./material/material.module";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./auth/auth.interceptor";
+import {ExamModule} from "./exam/exam.module";
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import {AuthInterceptor} from "./auth/auth.interceptor";
     McqModule,
     AuthModule,
     MaterialModule,
+    ExamModule,
     BrowserAnimationsModule,
     HttpClientModule,
   ],

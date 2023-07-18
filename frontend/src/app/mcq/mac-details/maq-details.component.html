@@ -87,6 +87,7 @@
       <p>Subject: {{ question.subject }}</p>
       <p>Chapter: {{ question.chapter }}</p>
       <p>Problem Setter: {{ question.problem_setter_name }}</p>
+      <p>Source: {{ question.source }}</p>
       <p>Verified: <mat-slide-toggle (change)="onToggleChange($event,'verified')"  [checked]="question.verified"></mat-slide-toggle></p>
       <p>Published: <mat-slide-toggle (change)="onToggleChange($event,'published')" [checked]="question.published"></mat-slide-toggle></p>
       <p>Create Date: {{ question.create_date  | date:'medium' }}</p>

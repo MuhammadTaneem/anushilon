@@ -24,6 +24,14 @@ const routes: Routes = [
         path: 'mcq',
         canActivate: [authGuard],
         loadChildren: () => import('./mcq/mcq.module').then((m) => m.McqModule),
+      },{
+        path: 'package',
+        canActivate: [authGuard],
+        loadChildren: () => import('./package/package.module').then((m) => m.PackageModule),
+      },{
+        path: 'exam',
+        canActivate: [authGuard],
+        loadChildren: () => import('./exam/exam.module').then((m) => m.ExamModule),
       },
       // {
       //   path: 'exam',

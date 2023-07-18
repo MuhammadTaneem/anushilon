@@ -66,6 +66,7 @@ export class McqAddComponent implements OnInit {
   correct_ans: new FormControl(null,Validators.required),
   explanation: new FormControl('',Validators.required),
   explanation_img: new FormControl(null),
+  source: new FormControl(null),
   hardness: new FormControl(null, Validators.required), // Add Validators.required
   categories: new FormControl(null,Validators.required),
   subject: new FormControl(null,Validators.required),
@@ -219,6 +220,7 @@ export class McqAddComponent implements OnInit {
       formData.append('correct_ans', row.correct_ans || '');
       formData.append('explanation', row.explanation || '');
       formData.append('subject', row.subject || '');
+      formData.append('source', row.source || '');
       formData.append('chapter', row.chapter || '');
       formData.append('hardness', row.hardness || '');
       formData.append('categories', row.categories || '');
@@ -342,9 +344,6 @@ export class McqAddComponent implements OnInit {
   editModeDataSet(){
     this.mcqService.getMcq(this.id).subscribe({
       next: (response)=>{
-        // console.log(response);
-        // console.log(this.questionImagePreviewUrl);
-        // console.log(response.question_img);
         this.questionImagePreviewUrl =response.question_img;
         this.optionOneImagePreviewUrl =response.option_img_1;
         this.optionTwoImagePreviewUrl =response.option_img_2;
@@ -405,6 +404,7 @@ export class McqAddComponent implements OnInit {
       formData.append('explanation', this.mcqForm.value.explanation || '');
       formData.append('subject', this.mcqForm.value.subject || '');
       formData.append('chapter', this.mcqForm.value.chapter || '');
+      formData.append('source', this.mcqForm.value.source || '');
       formData.append('hardness', this.mcqForm.value.hardness || '');
       formData.append('categories', this.mcqForm.value.categories || '');
       formData.append('problem_setter', this.mcqForm.value.problem_setter || '');
@@ -524,10 +524,6 @@ export class McqAddComponent implements OnInit {
   }
 
 
-  formUpload(formData:FormData){
-
-
-  }
 
 }
 

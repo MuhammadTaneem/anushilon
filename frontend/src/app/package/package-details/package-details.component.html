@@ -1,0 +1,42 @@
+
+
+<div class="question-card p-1" *ngIf="!loading">
+
+  <div class="container-fluid --bs-white">
+    <div class="row">
+      <div class="col">
+        <button mat-icon-button [routerLink]="['/package']">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+      </div>
+
+      <div class="col p-2 d-flex justify-content-end">
+
+        <button mat-icon-button [routerLink]="['/package/add/']" [queryParams]="{id: packageDetails.id}">
+          <mat-icon  >edit</mat-icon>
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <div class="p-2">
+    <p>Name: {{ packageDetails.name }}</p>
+    <p>Price: {{ packageDetails.price }}</p>
+    <p>Number of exam: {{ packageDetails.number_of_exam }}</p>
+    <p>Package start date: {{ packageDetails.package_start_date  | date:'mediumDate'  }}</p>
+    <p>Package End date: {{ packageDetails.package_end_date | date:'mediumDate'  }}</p>
+    <p>Group: {{ packageDetails.group }}</p>
+    <p>Discount amount: {{ packageDetails.discount_amount}}</p>
+    <p>Discount start date: {{ packageDetails.discount_start_date  | date:'mediumDate' }}</p>
+    <p>Discount End date: {{ packageDetails.discount_end_date | date:'mediumDate' }}</p>
+    <p>Problem Setter: {{ packageDetails.creator_name }}</p>
+
+    <p>Published: <mat-slide-toggle (change)="onToggleChange($event,'published')" [checked]="packageDetails.published"></mat-slide-toggle></p>
+    <p>Create Date: {{ packageDetails.create_date  | date:'medium' }}</p>
+    <p>Last Edit: {{ packageDetails.last_edit | date:'medium' }}</p>
+  </div>
+</div>

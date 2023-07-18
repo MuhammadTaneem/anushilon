@@ -124,6 +124,24 @@
 
         </div>
 
+        <div class="col-12 col-sm-6 col-md-3">
+
+          <mat-form-field class="full-width">
+            <mat-label>Create date range</mat-label>
+            <mat-date-range-input  [rangePicker]="date_picker">
+              <input matStartDate formControlName="create_start_date" placeholder="Start date">
+              <input matEndDate formControlName="create_end_date" placeholder="End date">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="date_picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #date_picker></mat-date-range-picker>
+
+            <mat-error *ngIf="filterForm.controls.create_start_date.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+            <mat-error *ngIf="filterForm.controls.create_end_date.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+          </mat-form-field>
+          <span *ngIf="filterForm.controls.create_start_date.errors">{{filterForm.controls.create_start_date.errors['api_error'] }}</span>
+          <span *ngIf="filterForm.controls.create_end_date.errors">{{filterForm.controls.create_end_date.errors['api_error'] }}</span>
+        </div>
+
       </div>
 
       <div class="row mb-5  mt-4">
@@ -169,12 +187,10 @@
       <td mat-cell *matCellDef="let row">{{row.chapter}}</td>
     </ng-container>
 
-    <ng-container matColumnDef="published">
-      <th mat-header-cell *matHeaderCellDef >published</th>
+    <ng-container matColumnDef="verified">
+      <th mat-header-cell *matHeaderCellDef >Verified</th>
       <td mat-cell *matCellDef="let row">
-        <mat-slide-toggle (change)="onToggleChange($event,row)" [checked]="row.published"></mat-slide-toggle>
-
-        <!--        <button (click)="toggle()" [class.active]="row.published">Toggle</button>-->
+        <mat-slide-toggle (change)="onToggleChange($event,row)" [checked]="row.verified"></mat-slide-toggle>
       </td>
     </ng-container>
 

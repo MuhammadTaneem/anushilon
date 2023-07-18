@@ -22,6 +22,7 @@ class MCQSerializer(serializers.ModelSerializer):
             'explanation',
             'explanation_img',
             'hardness',
+            'source',
             'categories',
             'subject',
             'chapter',

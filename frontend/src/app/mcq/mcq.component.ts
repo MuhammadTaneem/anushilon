@@ -19,7 +19,7 @@ export class McqComponent implements  OnInit {
   id:any;
   count:number = 0;
   queryParams: { [key: string]: any } = {};
-  displayedColumns = ['id','question','subject','chapter','published','details'];
+  displayedColumns = ['id','question','subject','chapter','verified','details'];
   filterForm = new FormGroup({
     subject: new FormControl(),
     chapter: new FormControl({ value: null,disabled: true }),
@@ -28,6 +28,8 @@ export class McqComponent implements  OnInit {
     problem_setter: new FormControl(),
     verified: new FormControl(  ),
     published: new FormControl(  ),
+    create_start_date: new FormControl<Date |null>( null,),
+    create_end_date:  new FormControl<Date |null>( null,),
   });
   constructor(
     private mcqService:McqService
@@ -53,6 +55,13 @@ export class McqComponent implements  OnInit {
         this.queryParams[key] = control!.value;
       }
     });
+    if  (this.filterForm.value.create_start_date){
+      this.queryParams['create_start_date'] = this.filterForm.value.create_start_date?.toISOString() || '';
+    }
+
+    if(this.filterForm.value.create_end_date){
+      this.queryParams['create_end_date'] =   this.filterForm.value.create_end_date?.toISOString() || '';
+    }
     console.log(this.queryParams);
     this.loadMcqList();
     this.toggleFilter();
@@ -60,6 +69,8 @@ export class McqComponent implements  OnInit {
   clearFilterData(){
       this.filterForm.reset();
       this.queryParams = {};
+      this.loadMcqList();
+      this.toggleFilter();
   }
 
   getConText(){
@@ -102,7 +113,7 @@ export class McqComponent implements  OnInit {
         formData.append(key, value);
       }
     }
-    formData.append('published',event.checked);
+    formData.append('verified',event.checked);
     formData.delete('option_img_1')
     formData.delete('option_img_2')
     formData.delete('option_img_3')

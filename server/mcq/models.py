@@ -1,7 +1,6 @@
 from django.db import models
 from rest_framework.exceptions import ValidationError
 
-from .enum import Subject, Category
 
 
 class MCQ(models.Model):
@@ -19,10 +18,11 @@ class MCQ(models.Model):
     explanation = models.TextField()
     explanation_img = models.ImageField(upload_to='mcq', null=True, blank=True)
     hardness = models.CharField(max_length=100)
+    source = models.CharField(max_length=100, null=True, blank=True)
     categories = models.CharField(max_length=100)
     subject = models.CharField(max_length=100)
     chapter = models.CharField(max_length=100)
-    problem_setter = models.ForeignKey('custom_user.CustomUser', on_delete=models.SET_NULL, null=True)
+    problem_setter = models.ForeignKey('custom_user.CustomUser', on_delete=models.DO_NOTHING, null=True, blank=True)
     verified = models.BooleanField(default=False)
     published = models.BooleanField(default=False)
     create_date = models.DateTimeField(auto_now_add=True)

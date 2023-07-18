@@ -1,0 +1,144 @@
+<div class="container-fluid --bs-white" >
+  <div class="row d-flex justify-content-end">
+
+    <button mat-icon-button (click)="toggleFilter()">
+      <mat-icon>filter_alt</mat-icon>
+    </button>
+
+
+    <button mat-icon-button [routerLink]="['/package/add']">
+      <mat-icon  >add</mat-icon>
+    </button>
+
+  </div>
+</div>
+
+
+<ng-container *ngIf="isFilterFormOpen">
+  <div class="container-fluid">
+    <h3 class="text-center">MCQ Filter Form</h3>
+    <form [formGroup]="filterForm" (ngSubmit)="onSubmitFilter()" class="form">
+      <div class="row">
+
+
+        <!--    chapter-->
+
+        <div class="col-12 col-sm-6 col-md-4">
+          <mat-form-field class="full-width">
+            <mat-label>Groups</mat-label>
+            <mat-select formControlName="group">
+              <mat-option *ngFor="let chapter of groups|keyvalue" [value]=chapter.key>{{ chapter.value   }} </mat-option>
+
+            </mat-select>
+            <mat-error *ngIf="filterForm.controls.group.invalid">
+              <span *ngIf="filterForm.controls.group.errors?.['required']">Chapter is required.</span>
+            </mat-error>
+          </mat-form-field>
+          <span *ngIf="filterForm.controls.group.errors">{{filterForm.controls.group.errors['api_error'] }}</span>
+
+        </div>
+        <!--end chapter-->
+
+        <!--      hardness-->
+
+
+        <div class="col-12 col-sm-6 col-md-4">
+          <mat-form-field class="full-width">
+            <mat-label>Published</mat-label>
+            <mat-select formControlName="published">
+              <mat-option value="True">True</mat-option>
+              <mat-option value="False">False</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <span *ngIf="filterForm.controls.published.errors">{{filterForm.controls.published.errors['api_error'] }}</span>
+
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-4">
+
+          <mat-form-field class="full-width">
+            <mat-label>Package date range</mat-label>
+            <mat-date-range-input  [rangePicker]="package_picker">
+              <input matStartDate formControlName="package_start_date" placeholder="Start date">
+              <input matEndDate formControlName="package_end_date" placeholder="End date">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="package_picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #package_picker></mat-date-range-picker>
+
+            <mat-error *ngIf="filterForm.controls.package_start_date.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+            <mat-error *ngIf="filterForm.controls.package_end_date.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+          </mat-form-field>
+          <span *ngIf="filterForm.controls.package_start_date.errors">{{filterForm.controls.package_start_date.errors['api_error'] }}</span>
+          <span *ngIf="filterForm.controls.package_end_date.errors">{{filterForm.controls.package_end_date.errors['api_error'] }}</span>
+        </div>
+      </div>
+
+      <div class="row mb-5  mt-4">
+        <div class="col d-flex justify-content-around">
+
+          <button  mat-stroked-button color="accent"  type="button" (click)="clearFilterData()">Clear Filter</button>
+          <button  mat-raised-button color="primary" type="submit">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-container>
+
+
+
+<div class="mat-elevation-z8">
+  <table mat-table class="full-width-table"  aria-label="Elements" [dataSource]="packageDataList" >
+    <!-- Id Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let row">{{row.id}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="details">
+      <th mat-header-cell *matHeaderCellDef>View</th>
+      <td mat-cell *matCellDef="let row">
+        <mat-icon [routerLink]="['/package/details', row.id]">visibility</mat-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef >name</th>
+      <td mat-cell *matCellDef="let row">{{row.name}}</td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="group">
+      <th mat-header-cell *matHeaderCellDef >Group</th>
+      <td mat-cell *matCellDef="let row">{{row.group}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="package_start_date">
+      <th mat-header-cell *matHeaderCellDef >Start</th>
+      <td mat-cell *matCellDef="let row">{{row.package_start_date | date:'MMM d,y' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="package_end_date">
+      <th mat-header-cell *matHeaderCellDef >End</th>
+      <td mat-cell *matCellDef="let row">{{row.package_end_date | date:'MMM d,y' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="published">
+      <th mat-header-cell *matHeaderCellDef >published</th>
+      <td mat-cell *matCellDef="let row">
+        <mat-slide-toggle (change)="onToggleChange($event,row)" [checked]="row.published"></mat-slide-toggle>
+      </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator #paginator
+                 (page)="onChangePage($event)"
+                 [length]="count"
+                 [pageIndex]="0"
+                 [pageSize]="25"
+                 [pageSizeOptions]="[10, 25, 50,100]"
+                 aria-label="Select page">
+  </mat-paginator>
+</div>

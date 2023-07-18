@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {MCQType} from "../mcq.model";
 import {McqService} from "../mcq.service";
 import {AuthService} from "../../auth/auth.service";
 import {ActivatedRoute} from "@angular/router";

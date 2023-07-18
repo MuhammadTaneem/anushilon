@@ -13,7 +13,15 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatSelectModule} from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import {DragDropModule,
+  CdkDrag,
+  CdkDropList,} from '@angular/cdk/drag-drop';
 
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 let module_list=[
   CommonModule,
   MatCardModule,
@@ -29,6 +37,13 @@ let module_list=[
   MatGridListModule,
   MatSelectModule,
   MatSnackBarModule,
+  MatPaginatorModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  DragDropModule,
+  MatStepperModule,
+  MatCheckboxModule,
+  CdkDropList, CdkDrag
 ];
 
 @NgModule({

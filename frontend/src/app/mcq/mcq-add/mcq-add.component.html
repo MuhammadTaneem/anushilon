@@ -286,7 +286,7 @@
     <!--    currect ans-->
 
 
-    explanation
+<!--    explanation-->
     <div class="row">
       <div class="col">
         <mat-form-field class="full-width">
@@ -313,7 +313,7 @@
       <input #explanationImageInput type="file" formControlName="explanation_img" class="d-none"
              (change)="onImageChange('explanation', $event)" accept="image/*">
     </div>
-    end explation
+<!--    end explation-->
 
     <!--    correct ans -->
 
@@ -406,7 +406,20 @@
         <span *ngIf="mcqForm.controls.categories.errors">{{mcqForm.controls.categories.errors['api_error'] }}</span>
 
       </div>
-      <!--      categories end-->
+
+
+      <div class="col-12 col-sm-6 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Question source</mat-label>
+          <input matInput type="text" formControlName="source">
+          <mat-error *ngIf="mcqForm.controls.source.invalid">
+            <span *ngIf="mcqForm.controls.source.errors?.['required']">source is required.</span>
+          </mat-error>
+        </mat-form-field>
+        <span *ngIf="mcqForm.controls.source.errors">{{mcqForm.controls.source.errors['api_error'] }}</span>
+      </div>
+
+    <!--      categories end-->
       <!--      problem_setter -->
       <div class="col-12 col-sm-6 col-md-3" *ngIf="!userIsProblemSetter">
         <mat-form-field class="full-width">

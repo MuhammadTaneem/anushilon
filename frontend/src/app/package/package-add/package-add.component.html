@@ -1,0 +1,147 @@
+<div class="container-fluid --bs-white">
+  <div class="row">
+    <div class="col">
+      <button mat-icon-button [routerLink]="['/package']">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid">
+  <form [formGroup]="packageForm" (ngSubmit)="onSubmit()" class="form">
+
+    <div class="row">
+
+      <div class="col-12 col-sm-6 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Name</mat-label>
+          <input matInput type="text" formControlName="name">
+          <mat-error *ngIf="packageForm.controls.name.invalid">
+            <span *ngIf="packageForm.controls.name.errors?.['required']">Name is required.</span>
+          </mat-error>
+        </mat-form-field>
+        <span *ngIf="packageForm.controls.name.errors">{{packageForm.controls.name.errors['api_error'] }}</span>
+      </div>
+
+
+      <div class="col-12 col-sm-6 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Price</mat-label>
+          <input matInput type="text" formControlName="price" >
+          <mat-error *ngIf="packageForm.controls.price.invalid">
+            <span *ngIf="packageForm.controls.price.errors?.['required']">price amount is required.</span>
+          </mat-error>
+        </mat-form-field>
+        <span *ngIf="packageForm.controls.price.errors">{{packageForm.controls.price.errors['api_error'] }}</span>
+      </div>
+
+      <div class="col-12 col-sm-6 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>discount amount</mat-label>
+          <input matInput type="text" formControlName="discount_amount">
+          <mat-error *ngIf="packageForm.controls.discount_amount.invalid">
+            <span *ngIf="packageForm.controls.discount_amount.errors?.['required']">discount amount is required.</span>
+          </mat-error>
+        </mat-form-field>
+        <span *ngIf="packageForm.controls.discount_amount.errors">{{packageForm.controls.discount_amount.errors['api_error'] }}</span>
+      </div>
+
+
+      <div class="col-12 col-sm-6 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>number of exam</mat-label>
+          <input matInput type="text" formControlName="number_of_exam">
+          <mat-error *ngIf="packageForm.controls.number_of_exam.invalid">
+            <span *ngIf="packageForm.controls.number_of_exam.errors?.['required']">number of exam is required.</span>
+          </mat-error>
+        </mat-form-field>
+        <span *ngIf="packageForm.controls.number_of_exam.errors">{{packageForm.controls.number_of_exam.errors['api_error'] }}</span>
+      </div>
+
+
+
+      <!--      group-->
+      <div class="col-12 col-sm-6 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Group</mat-label>
+          <mat-select formControlName="group">
+            <mat-option *ngFor="let label of groups|keyvalue" [value]=label.key>{{ label.value   }} </mat-option>
+
+          </mat-select>
+          <mat-error *ngIf="packageForm.controls.group.invalid">
+            <span *ngIf="packageForm.controls.group.errors?.['required']">Group is required.</span>
+          </mat-error>
+        </mat-form-field>
+        <span *ngIf="packageForm.controls.group.errors">{{packageForm.controls.group.errors['api_error'] }}</span>
+
+      </div>
+      <!--      group end-->
+
+
+      <div class="col-12 col-sm-6 col-md-3">
+
+        <mat-form-field class="full-width">
+          <mat-label>Package date range</mat-label>
+          <mat-date-range-input  [rangePicker]="package_picker">
+            <input matStartDate formControlName="package_start_date" placeholder="Start date">
+            <input matEndDate formControlName="package_end_date" placeholder="End date">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matIconSuffix [for]="package_picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #package_picker></mat-date-range-picker>
+
+          <mat-error *ngIf="packageForm.controls.package_start_date.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+          <mat-error *ngIf="packageForm.controls.package_end_date.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+        </mat-form-field>
+        <span *ngIf="packageForm.controls.package_start_date.errors">{{packageForm.controls.package_start_date.errors['api_error'] }}</span>
+        <span *ngIf="packageForm.controls.package_end_date.errors">{{packageForm.controls.package_end_date.errors['api_error'] }}</span>
+      </div>
+
+
+      <div class="col-12 col-sm-6 col-md-3">
+
+        <mat-form-field class="full-width">
+          <mat-label>Discount date range</mat-label>
+          <mat-date-range-input [rangePicker]="discount_picker">
+            <input matStartDate formControlName="discount_start_date" placeholder="Start date">
+            <input matEndDate formControlName="discount_end_date" placeholder="End date">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matIconSuffix [for]="discount_picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #discount_picker></mat-date-range-picker>
+
+          <mat-error *ngIf="packageForm.controls.discount_start_date.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+          <mat-error *ngIf="packageForm.controls.discount_end_date.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+        </mat-form-field>
+        <span *ngIf="packageForm.controls.discount_start_date.errors">{{packageForm.controls.discount_start_date.errors['api_error'] }}</span>
+        <span *ngIf="packageForm.controls.discount_end_date.errors">{{packageForm.controls.discount_end_date.errors['api_error'] }}</span>
+      </div>
+
+
+    </div>
+
+    <div class="row">
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea rows="4" matInput type="text" formControlName="description"></textarea>
+            <mat-error *ngIf="packageForm.controls.description.invalid">
+              <span *ngIf="packageForm.controls.description.errors?.['required']">Description is required.</span>
+            </mat-error>
+
+          </mat-form-field>
+          <span *ngIf="packageForm.controls.description.errors">{{packageForm.controls.description.errors['api_error'] }}</span>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row mb-5  mt-4">
+      <div class="col d-flex justify-content-center">
+        <button mat-raised-button color="primary" type="submit">Submit</button>
+      </div>
+    </div>
+
+  </form>
+</div>

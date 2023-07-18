@@ -6,7 +6,6 @@ from custom_user.enum import UserRole
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
-        import pdb;pdb.set_trace()
         if not email:
             raise ValueError("Email is required.")
         email = self.normalize_email(email)
