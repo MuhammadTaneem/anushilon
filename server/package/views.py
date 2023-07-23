@@ -4,7 +4,7 @@ from rest_framework import generics, mixins
 from rest_framework.authentication import BasicAuthentication, TokenAuthentication
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from .enum import group_enum_dict
+from utility.enum import group_enum_dict
 from .models import Package
 from .serializers import PackageSerializer
 

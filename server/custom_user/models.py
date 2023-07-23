@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser
 from django.db import models
 from custom_user.manager import CustomUserManager
-from custom_user.enum import UserRole
+from utility.enum import UserRole
 
 
 class CustomUser(AbstractBaseUser):

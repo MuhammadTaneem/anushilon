@@ -25,4 +25,6 @@ urlpatterns = [
     path('mcq/', include('mcq.urls')),
     path('package/', include('package.urls')),
     path('exam/', include('exam.urls')),
+    path('student/', include('student.urls')),
+    path('coupon/', include('coupon.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -14,6 +14,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./auth/auth.interceptor";
 import {ExamModule} from "./exam/exam.module";
+import {CouponModule} from "./coupon/coupon.module";
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import {ExamModule} from "./exam/exam.module";
     HomepageComponent,
     AppbarComponent,
     FooterComponent,
+
 
   ],
   imports: [
@@ -31,6 +33,7 @@ import {ExamModule} from "./exam/exam.module";
     AuthModule,
     MaterialModule,
     ExamModule,
+    CouponModule,
     BrowserAnimationsModule,
     HttpClientModule,
   ],

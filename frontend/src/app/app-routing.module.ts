@@ -32,6 +32,10 @@ const routes: Routes = [
         path: 'exam',
         canActivate: [authGuard],
         loadChildren: () => import('./exam/exam.module').then((m) => m.ExamModule),
+      },{
+        path: 'coupon',
+        canActivate: [authGuard],
+        loadChildren: () => import('./coupon/coupon.module').then((m) => m.CouponModule),
       },
       // {
       //   path: 'exam',

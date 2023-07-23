@@ -1,7 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
 
-from custom_user.enum import UserRole
+from utility.enum import UserRole
 
 
 class CustomUserManager(BaseUserManager):

@@ -56,7 +56,6 @@ export class PackageAddComponent  implements OnInit{
     this.packageService.getPackageAddContext().subscribe({
       next: (response)=>{
         this.groups = response.groups;
-        console.log(this.groups);
       },
       error: (err)=>{
         console.log(err.status_code);

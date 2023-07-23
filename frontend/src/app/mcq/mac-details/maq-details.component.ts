@@ -59,7 +59,6 @@ export class MaqDetailsComponent implements OnInit {
   loadMcq(id:number){
     this.mcqService.getMcq(id).subscribe({
       next: (response)=>{
-        console.log(response);
         this.question = response;
         this.loading = false;
       },

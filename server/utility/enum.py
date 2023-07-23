@@ -1,6 +1,21 @@
 from enum import Enum
 
 
+class GroupEnum(Enum):
+    arts = 'Arts'
+    science = 'Science'
+    commerce = 'Commerce'
+def group_enum_dict():
+    return {e.name: e.value for e in GroupEnum}
+
+
+class UserRole(Enum):
+    admin = 'Admin'
+    super_admin = 'Super Admin'
+    problem_setter = 'Problem Setter'
+    student = 'Student'
+
+
 def hardness_enum_dict():
     return {e.name: e.value for e in Hardness}
 
@@ -127,3 +142,6 @@ class Category(Enum):
     theoretical = "Theoretical"
     mathematical = "Mathematical"
     critical = "Critical"
+    high_important = "High Important"
+    medium_important = "Medium Important"
+    low_important = "Low Important"

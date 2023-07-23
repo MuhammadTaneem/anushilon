@@ -37,12 +37,12 @@ export class PackageDetailsComponent implements OnInit{
       }
     }
     formData.append(key,event.checked);
-    formData.delete('option_img_1')
-    formData.delete('option_img_2')
-    formData.delete('option_img_3')
-    formData.delete('option_img_4')
-    formData.delete('question_img')
-    formData.delete('explanation_img')
+    // formData.delete('option_img_1')
+    // formData.delete('option_img_2')
+    // formData.delete('option_img_3')
+    // formData.delete('option_img_4')
+    // formData.delete('question_img')
+    // formData.delete('explanation_img')
     this.packageService.updatePackage(formData,this.packageDetails.id).subscribe({
       next: (response)=>{
         console.log(response)
@@ -59,7 +59,6 @@ export class PackageDetailsComponent implements OnInit{
   loadMcq(id:number){
     this.packageService.getPackage(id).subscribe({
       next: (response)=>{
-        console.log(response);
         this.packageDetails = response;
         this.loading = false;
       },

@@ -1,0 +1,68 @@
+
+
+<div class="question-card p-1" *ngIf="!loading">
+
+  <div class="container-fluid --bs-white">
+    <div class="row">
+      <div class="col">
+        <button mat-icon-button [routerLink]="['/coupon']">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+      </div>
+
+      <div class="col p-2 d-flex justify-content-end">
+
+        <button mat-icon-button [routerLink]="['/coupon/add/']" [queryParams]="{id: couponDetails.id}">
+          <mat-icon  >edit</mat-icon>
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <div class="p-2">
+    <p>package_name: {{ couponDetails.coupon_text }}</p>
+    <p>exam_date: {{ couponDetails.coupon_start_date | date:'mediumDate' }}</p>
+    <p>exam_date: {{ couponDetails.coupon_end_date | date:'mediumDate' }}</p>
+    <p>creator_name: {{ couponDetails.creator_name }}</p>
+
+
+    <p>Published: <mat-slide-toggle (change)="onToggleChange($event,'published')" [checked]="couponDetails.published"></mat-slide-toggle></p>
+
+    <p>Create Date: {{ couponDetails.create_date  | date:'medium' }}</p>
+    <p>Last Edit: {{ couponDetails.last_edit | date:'medium' }}</p>
+<!--    <p>packages_list: {{ couponDetails.packages }}</p>-->
+
+    <div *ngIf="couponDetails.packages_list && couponDetails.packages_list.length">
+      <p>Packages:</p>
+      <ul>
+        <li *ngFor="let package of couponDetails.packages_list">
+
+          <div class="row">
+            <div class="col">
+              <span>
+                name: {{ package.name }}
+              </span>
+            </div>
+            <div class="col">
+              <span>
+                Group: {{ package.group }}
+              </span>
+            </div>
+            <div class="col">
+              <a [routerLink]="['/package/details/',package.id]" target="_blank">
+
+                <button mat-icon-button>
+                  <mat-icon  color="primary">visibility</mat-icon>
+                </button>
+              </a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

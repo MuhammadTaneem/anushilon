@@ -5,7 +5,7 @@ from mcq.models import MCQ
 
 
 class ExamSerializer(serializers.ModelSerializer):
-    mcq_list = serializers.ListField(child=serializers.IntegerField())
+    creator = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Exam
@@ -23,19 +23,26 @@ class ExamSerializer(serializers.ModelSerializer):
             'creator_name',
             'published',
             'create_date',
-            'last_edit'
+            'package_name',
+            'last_edit',
+            'mcq_list_value'
         )
 
-    def create(self, validated_data):
-        mcq_list_data = validated_data.pop('mcq_list', [])
-        exam = Exam.objects.create(**validated_data)
-        for question_id in mcq_list_data:
-            mcq_question = MCQ.objects.get(id=question_id)
-            exam.mcq_list.add(mcq_question)
+    mcq_list = serializers.PrimaryKeyRelatedField(
+        queryset=MCQ.objects.all(),
+        many=True,
+        required=False,
+    )
 
-        return exam
-
-    def validate(self, attrs):
-        if not attrs.get('creator'):
-            attrs['creator'] = self.context['request'].user
-        return attrs
+    # def to_internal_value(self, data):
+    #
+    #     import pdb;pdb.set_trace()
+    #     if 'mcq_list' in data:
+    #         mcq_list = data['mcq_list']
+    #         if isinstance(mcq_list, str):
+    #             # Convert a comma-separated string to a list of integers
+    #             mcq_list = [int(mcq_id) for mcq_id in mcq_list.split(',')]
+    #
+    #         data['mcq_list'] = mcq_list
+    #
+    #     return super().to_internal_value(data)

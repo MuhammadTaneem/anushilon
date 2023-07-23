@@ -58,7 +58,6 @@ export class PackageComponent implements  OnInit{
     if(this.filterForm.value.package_end_date){
       this.queryParams['package_end_date'] =   this.filterForm.value.package_end_date?.toISOString() || '';
     }
-    console.log(this.queryParams);
     this.loadPackageList();
     this.toggleFilter();
   }
@@ -112,8 +111,6 @@ export class PackageComponent implements  OnInit{
   loadPackageList(limit=25, offset =0){
     this.packageService.getPackageList(limit,offset,this.queryParams).subscribe({
       next: (response)=>{
-        console.log(response.results);
-        console.log(response.count);
         this.packageDataList = response.results;
         this.count = response.count;
       },

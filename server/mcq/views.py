@@ -5,7 +5,8 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.db.models import Q, F
-from .enum import hardness_enum_dict, category_enum_dict, subjects_enum_dict
+
+from utility.enum import hardness_enum_dict, category_enum_dict, subjects_enum_dict
 from .models import MCQ
 from .serializers import MCQSerializer
 from custom_user.models import CustomUser

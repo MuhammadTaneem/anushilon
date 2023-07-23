@@ -42,6 +42,10 @@ INSTALLED_APPS = [
     'package',
     'exam',
     'mcq',
+    'student',
+    'payment',
+    'coupon',
+
 
 ]
 # CORS_ALLOWED_ORIGIN = '*'

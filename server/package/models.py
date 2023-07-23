@@ -1,5 +1,5 @@
 from django.db import models
-from .enum import GroupEnum
+from utility.enum import GroupEnum
 
 
 class Package(models.Model):

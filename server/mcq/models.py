@@ -65,3 +65,5 @@ class MCQ(models.Model):
         if self.problem_setter:
             return self.problem_setter.full_name
         return None
+    def __str__(self):
+        return self.question

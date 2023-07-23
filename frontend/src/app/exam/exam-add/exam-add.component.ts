@@ -6,12 +6,10 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {ActivatedRoute, Router} from "@angular/router";
 import {McqService} from "../../mcq/mcq.service";
 import {
-  CdkDragDrop,
   moveItemInArray,
   transferArrayItem,
-  CdkDrag,
-  CdkDropList,
 } from '@angular/cdk/drag-drop';
+import {PageEvent} from "@angular/material/paginator";
 @Component({
   selector: 'app-exam-add',
   templateUrl: './exam-add.component.html',
@@ -23,9 +21,10 @@ export class ExamAddComponent implements OnInit{
 
 
   id:any;
+  loading:boolean = true;
   editMode:boolean=false;
   isFilterFormOpen:boolean=true;
-  queryParams: { [key: string]: any } = {};
+  queryParams: { [key: string]: any } = {'verified':'True'};
   selectedSubject:any;
   mcqDataList:any;
   selectedMcq:any=[];
@@ -42,12 +41,12 @@ export class ExamAddComponent implements OnInit{
     duration: new FormControl(null, Validators.required),
     point: new FormControl(null, Validators.required),
     exam_date: new FormControl(Validators.required),
-    package: new FormControl(null, Validators.required),
+    package: new FormControl( Validators.required),
     mcq_list: new FormControl(),
     published: new FormControl( false ),
   });
 
-  filterForm = new FormGroup({
+  mcqFilterForm = new FormGroup({
     subject: new FormControl(),
     chapter: new FormControl({ value: null,disabled: true }),
     hardness: new FormControl(), // Add Validators.required
@@ -83,39 +82,37 @@ export class ExamAddComponent implements OnInit{
 
   toggleFilter(){
     this.isFilterFormOpen = !this.isFilterFormOpen;
-    if(this.isFilterFormOpen){
-      this.getConText();
-    }
+    // if(this.isFilterFormOpen){
+    //   this.getConText();
+    // }
   }
 
   onSubmitFilter(){
-    Object.keys(this.filterForm.controls).forEach((key:string) => {
-      const control = this.filterForm.get(key);
+    Object.keys(this.mcqFilterForm.controls).forEach((key:string) => {
+      const control = this.mcqFilterForm.get(key);
       if (control!.value) {
         this.queryParams[key] = control!.value;
       }
     });
-    if  (this.filterForm.value.create_start_date){
-      this.queryParams['create_start_date'] = this.filterForm.value.create_start_date?.toISOString() || '';
+    if  (this.mcqFilterForm.value.create_start_date){
+      this.queryParams['create_start_date'] = this.mcqFilterForm.value.create_start_date?.toISOString() || '';
     }
 
-    if(this.filterForm.value.create_end_date){
-      this.queryParams['create_end_date'] =   this.filterForm.value.create_end_date?.toISOString() || '';
+    if(this.mcqFilterForm.value.create_end_date){
+      this.queryParams['create_end_date'] =   this.mcqFilterForm.value.create_end_date?.toISOString() || '';
     }
-    console.log(this.queryParams);
     this.loadMcqList();
     this.toggleFilter();
   }
   clearFilterData(){
-    this.filterForm.reset();
-    this.queryParams = {};
+    this.mcqFilterForm.reset();
+    this.queryParams = {'verified':'True'};
     this.loadMcqList();
     this.toggleFilter();
   }
   getConText(){
     this.examService.getExamAddContext().subscribe({
       next: (response)=>{
-        console.log(response)
         this.subjects = Object.values(response.data.subjects);
         this.packages = response.data.packages;
         this.category = response.data.category;
@@ -135,10 +132,32 @@ export class ExamAddComponent implements OnInit{
   }
 
   editModeDataSet(){
-
+    this.examService.getExam(this.id).subscribe({
+      next: (response)=>{
+        this.examForm.patchValue(response);
+        this.examForm.controls['package'].setValue(response.package.toString());
+        this.selectedSubjects = JSON.parse(response.syllabus);
+        this.selectedMcq=response.mcq_list_value;
+      },
+      error: (err)=>{
+        this.snackBar.open(err.message, 'Dismiss', {
+          duration: 3000, // Duration in milliseconds (3 seconds in this example)
+          panelClass: 'error-snackbar' // Custom CSS class for styling error messages
+        });
+      },
+    })
   }
 
+  isChapterChecked(subject: any, chapter: any): boolean {
 
+    const subjectName = subject.name;
+    const chapterKey = chapter.key;
+    if(this.selectedSubjects[subjectName]?.[chapterKey]){
+    return  true;
+    }
+    return  false;
+    // return this.selectedSubjects[subjectName]?.[chapterKey] === true;
+  }
   toggleChapter(subject: string, chapter: any): void {
     if (!this.selectedSubjects[subject]) {
       this.selectedSubjects[subject] = {};
@@ -152,15 +171,11 @@ export class ExamAddComponent implements OnInit{
     } else {
       this.selectedSubjects[subject][chapter] = chapter;
     }
-
-    console.log(this.selectedSubjects);
   }
 
   loadMcqList(limit=25, offset =0){
     this.mcqService.getMcqList(limit,offset,this.queryParams).subscribe({
       next: (response)=>{
-        console.log(response.results);
-        console.log(response.count);
         this.mcqDataList = response.results;
         this.count = response.count;
 
@@ -181,42 +196,46 @@ export class ExamAddComponent implements OnInit{
     this.selectedSubject = this.subjects.find(subject=> subject.name === event.value);
     this.selectedSubject = this.selectedSubject.chapters;
     if (this.selectedSubject) {
-      this.filterForm.get('chapter')?.enable();
+      this.mcqFilterForm.get('chapter')?.enable();
     } else {
-      this.filterForm.get('chapter')?.disable();
+      this.mcqFilterForm.get('chapter')?.disable();
     }
   }
 
-
-
   onSubmit(): void {
-    this.examForm.controls.syllabus.setValue(this.selectedSubjects);
 
-    let mcqIdList = [];
-
-    for (let i of this.selectedMcq){
-      mcqIdList.push(i.id);
+    if(this.selectedSubjects){
+    // @ts-ignore
+      this.examForm.controls.syllabus.setValue(JSON.stringify(this.selectedSubjects));
     }
 
+    let mcqIdList:number[]= [];
+    for (let i of this.selectedMcq){
+
+      mcqIdList.push(i.id);
+    }
+    let exam_Date;
+
     if (this.examForm.valid) {
-      let formData:FormData = new FormData()
-      formData.append('syllabus', this.selectedSubjects || '');
-      formData.append('exam_number', this.examForm.value.exam_number || '');
-      formData.append('number_of_question', this.examForm.value.number_of_question || '');
-      formData.append('duration', this.examForm.value.duration || '');
-      formData.append('point', this.examForm.value.point || '');
-      formData.append('package', this.examForm.value.package || '');
-      formData.append('mcq_list', mcqIdList.join(','));
-      formData.append('published', this.examForm.value.published!.toString());
-      formData.append('exam_date', this.examForm.value.exam_date instanceof Date ? this.examForm.value.exam_date.toISOString() : `${this.examForm.value.exam_date}`);
+      if(this.examForm.value.exam_date instanceof Date){
+        exam_Date =   this.examForm.value.exam_date.toISOString();
+      }
 
-
-
-
+     let  exam_data: any = {
+        syllabus:  this.examForm.value.syllabus,
+        exam_number: this.examForm.value.exam_number,
+        number_of_question: this.examForm.value.number_of_question,
+        duration: this.examForm.value.duration,
+        point: this.examForm.value.point,
+        exam_date: exam_Date,
+        package: this.examForm.value.package,
+        mcq_list: mcqIdList,
+        published: this.examForm.value.published!.toString()
+      };
 
       if(this.editMode){
 
-        this.examService.updateExam(formData,this.id).subscribe({
+        this.examService.updateExam(exam_data,this.id).subscribe({
           next: (response)=>{
             this.examForm.reset();
             // location.reload();
@@ -224,7 +243,7 @@ export class ExamAddComponent implements OnInit{
               duration: 3000, // Duration in milliseconds (3 seconds in this example)
               panelClass: 'success-snackbar' // Custom CSS class for styling success messages
             });
-            this.router.navigate(['/package']);
+            this.router.navigate(['/exam']);
 
           },
           error: (err)=>{
@@ -247,7 +266,7 @@ export class ExamAddComponent implements OnInit{
       else{
 
         this.examService.addNewExam(
-          formData
+          exam_data
         ).subscribe({
           next: (response)=>{
             this.examForm.reset();
@@ -256,7 +275,7 @@ export class ExamAddComponent implements OnInit{
               duration: 3000, // Duration in milliseconds (3 seconds in this example)
               panelClass: 'success-snackbar' // Custom CSS class for styling success messages
             });
-            this.router.navigate(['/package']);
+            this.router.navigate(['/exam']);
           },
           error: (err)=>{
             console.log(err)
@@ -285,9 +304,7 @@ export class ExamAddComponent implements OnInit{
     }
   }
 
-
-
-  drop(event: any) {
+  drop(event: any,container:string) {
     if (event.previousContainer === event.container) {
       moveItemInArray(
         event.container.data,
@@ -295,18 +312,32 @@ export class ExamAddComponent implements OnInit{
         event.currentIndex
       );
     } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
+      const mcqToAdd = event.previousContainer.data[event.previousIndex];
+      if (container === 'selectedMcq' && !this.isMcqAlreadySelected(mcqToAdd)) {
+        transferArrayItem(
+          event.previousContainer.data,
+          event.container.data,
+          event.previousIndex,
+          event.currentIndex
+        );
+      } else if (container !== 'selectedMcq') {
+        transferArrayItem(
+          event.previousContainer.data,
+          event.container.data,
+          event.previousIndex,
+          event.currentIndex
+        );
+      }
     }
   }
 
+  isMcqAlreadySelected(mcq: any): boolean {
+    // @ts-ignore
+    return this.selectedMcq.some((item) => item.id === mcq.id);
+  }
 
-
-
-
+  onChangePage(pageData: PageEvent) {
+    this.loadMcqList(pageData.pageSize,pageData.pageIndex *pageData.pageSize);
+  }
 
 }

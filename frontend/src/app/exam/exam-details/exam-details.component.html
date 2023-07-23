@@ -1,1 +1,77 @@
-<p>exam-details works!</p>
+
+
+<div class="question-card p-1" *ngIf="!loading">
+
+  <div class="container-fluid --bs-white">
+    <div class="row">
+      <div class="col">
+        <button mat-icon-button [routerLink]="['/exam']">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+      </div>
+
+      <div class="col p-2 d-flex justify-content-end">
+
+        <button mat-icon-button [routerLink]="['/exam/add/']" [queryParams]="{id: examDetails.id}">
+          <mat-icon  >edit</mat-icon>
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <div class="p-2">
+    <p>package_name: {{ examDetails.package_name }}</p>
+    <p>exam_number: {{ examDetails.exam_number }}</p>
+    <p>number_of_question: {{ examDetails.number_of_question }}</p>
+    <p>duration: {{ examDetails.duration }}</p>
+    <p>point: {{ examDetails.point }}</p>
+    <p>exam_date: {{ examDetails.exam_date | date:'mediumDate' }}</p>
+    <p>creator_name: {{ examDetails.creator_name }}</p>
+
+
+    <p>Published: <mat-slide-toggle (change)="onToggleChange($event,'published')" [checked]="examDetails.published"></mat-slide-toggle></p>
+    <p>mcq_list: {{ examDetails.mcq_list }}</p>
+    <p>Create Date: {{ examDetails.create_date  | date:'medium' }}</p>
+    <p>Last Edit: {{ examDetails.last_edit | date:'medium' }}</p>
+
+
+    <div *ngIf="examDetails.mcq_list_value && examDetails.mcq_list_value.length">
+      <p>Packages:</p>
+      <ul>
+        <li *ngFor="let mcq of examDetails.mcq_list_value">
+          <div class="row">
+            <div class="col">
+              <span>
+                question: {{ mcq.question }}
+              </span>
+            </div>
+            <div class="col">
+              <span>
+                question: {{ mcq.subject }}
+              </span>
+            </div>
+            <div class="col">
+              <span>
+                question: {{ mcq.chapter }}
+              </span>
+            </div>
+            <div class="col">
+              <a [routerLink]="['/mcq/details/',mcq.id]" target="_blank">
+
+                <button mat-icon-button>
+                  <mat-icon  color="primary">visibility</mat-icon>
+                </button>
+              </a>
+            </div>
+          </div>
+<!--          <p>Name: {{package.name}}</p>-->
+<!--          <p>Group: {{package.group}}</p>-->
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

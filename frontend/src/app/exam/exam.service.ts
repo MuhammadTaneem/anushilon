@@ -40,10 +40,10 @@ export class ExamService {
     return  this.http.get<any>(this.BACKEND_URL+`${id}/`);
   }
 
-  addNewExam(formData:FormData,){
+  addNewExam(formData:any,){
     return this.http.post<any>(this.BACKEND_URL,formData);
   }
-  updateExam(formData:FormData,id:number){
+  updateExam(formData:any,id:number){
     return this.http.put<any>(this.BACKEND_URL+`${id}/`,formData);
   }
 }

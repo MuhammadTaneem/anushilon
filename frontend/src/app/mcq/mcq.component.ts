@@ -138,8 +138,6 @@ export class McqComponent implements  OnInit {
   loadMcqList(limit=25, offset =0){
     this.mcqService.getMcqList(limit,offset,this.queryParams).subscribe({
       next: (response)=>{
-        console.log(response.results);
-        console.log(response.count);
         this.mcqDataList = response.results;
         this.count = response.count;
       },

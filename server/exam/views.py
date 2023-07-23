@@ -6,7 +6,7 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from custom_user.models import CustomUser
-from mcq.enum import subjects_enum_dict, hardness_enum_dict, category_enum_dict
+from utility.enum import subjects_enum_dict, hardness_enum_dict, category_enum_dict
 from package.models import Package
 from .models import Exam
 from .serializers import ExamSerializer
@@ -29,21 +29,21 @@ class ExamView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericA
         if package:
             queryset = queryset.filter(package=package)
 
-        subjects = self.request.query_params.get('subjects')
-        if subjects:
-            queryset = queryset.filter(subjects__icontains=subjects)
+        # subjects = self.request.query_params.get('subjects')
+        # if subjects:
+        #     queryset = queryset.filter(subjects__icontains=subjects)
+        #
+        # chapters = self.request.query_params.get('chapters')
+        # if chapters:
+        #     queryset = queryset.filter(chapters__icontains=chapters)
 
-        chapters = self.request.query_params.get('chapters')
-        if chapters:
-            queryset = queryset.filter(chapters__icontains=chapters)
+        from_date = self.request.query_params.get('exam_from_date')
+        if from_date:
+            queryset = queryset.filter(exam_date__gte=from_date)
 
-        start_date = self.request.query_params.get('exam_start_date')
-        if start_date:
-            queryset = queryset.filter(date__gte=start_date)
-
-        end_date = self.request.query_params.get('exam_end_date')
-        if end_date:
-            queryset = queryset.filter(date__lte=end_date)
+        to_date = self.request.query_params.get('exam_to_date')
+        if to_date:
+            queryset = queryset.filter(exam_date__lte=to_date)
 
         queryset = queryset.order_by('-id')
 
@@ -73,7 +73,7 @@ class ExamUpdateView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, generic
 @require_GET
 def get_exam_add_context(request):
     try:
-        packages = Package.objects.all()
+        packages = Package.objects.filter(published=True)
         packages_list = {package.id: package.name for package in packages}
         admins = CustomUser.objects.all()
         admin_data = {admin.id: admin.full_name for admin in admins}
