@@ -13,6 +13,7 @@ import 'package:mobile_app/hsc/hsc_screen.dart';
 import 'package:mobile_app/medical/medichal_screen.dart';
 import 'package:mobile_app/notification/notification_screen.dart';
 import 'package:mobile_app/participatedExam/participated_screen.dart';
+import 'package:mobile_app/profile/group_seclection.dart';
 import 'package:mobile_app/profile/profile_page_screen.dart';
 import 'package:mobile_app/questionBank/question_bank.dart';
 import 'package:mobile_app/subjectWise/subject_wise.dart';
@@ -76,6 +77,7 @@ class _MyAppState extends State<MyApp> {
           ParticipatedScreen.routeName: (ctx) => const ParticipatedScreen(),
           GucchoScreen.routeName: (ctx) => const GucchoScreen(),
           NotificationScreen.routeName: (ctx) =>  NotificationScreen(),
+          GroupSelectionScreen.routeName: (ctx) =>  GroupSelectionScreen(),
 
 
         },

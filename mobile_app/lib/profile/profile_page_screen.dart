@@ -26,6 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   var email;
   var profileUrl;
   var name;
+  late int balance =0;
   late bool loading = true;
   late GoogleAuth googleAuth =  GoogleAuth();
 
@@ -36,6 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final LocalStorage storage = await getStorage();
     name = await storage.getItem('userDisplayName');
     email = await storage.getItem('userEmail');
+    balance = await storage.getItem('balance');
     profileUrl = await storage.getItem('userPhotoUrl');
     setState(() {
     loading = false;
@@ -83,6 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  profileUrl!=null?
                   CachedNetworkImage(
                     imageUrl: profileUrl??'',
                     imageBuilder: (context, imageProvider) => CircleAvatar(
@@ -97,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       radius: 80,
                       backgroundImage: AssetImage('assets/images/pp.png'), // Show alternative image on error
                     ),
-                  ),
+                  ):Container(),
 
 
                 ],
@@ -105,7 +108,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Text(name??'', style: Theme.of(context).textTheme.headlineSmall),
             Text("ইমেইল : ${email??''}"),
-            Text("ব্যালেন্স :${banglaNumberFormat.format(123)} টাকা",),
+            Text("ব্যালেন্স :${banglaNumberFormat.format(balance)} টাকা",),
             // Text("ব্যালেন্স : 123 taka"),
 
             Container(

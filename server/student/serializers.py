@@ -11,6 +11,8 @@ class StudentSerializer(serializers.ModelSerializer):
             'name',
             'email',
             'photo_url',
+            'balance',
+            'google_id',
             'group',
             'create_date',
             'last_edit',
