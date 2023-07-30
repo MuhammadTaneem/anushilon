@@ -11,7 +11,7 @@ class Exam(models.Model):
     number_of_question = models.IntegerField(null=False, blank=False)
     duration = models.IntegerField(null=False, blank=False)
     point = models.IntegerField(null=False, blank=False)
-    exam_date = models.DateTimeField(null=False, blank=False)
+    exam_date = models.DateField(null=False, blank=False)
     package = models.ForeignKey(Package, on_delete=models.DO_NOTHING, null=False, blank=False)
     creator = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING, null=False, blank=False)
     mcq_list = models.ManyToManyField(MCQ)
@@ -33,3 +33,4 @@ class Exam(models.Model):
         related_objects = self.mcq_list.all()
         related_ids = related_objects.values()
         return related_ids
+

@@ -218,7 +218,8 @@ export class ExamAddComponent implements OnInit{
 
     if (this.examForm.valid) {
       if(this.examForm.value.exam_date instanceof Date){
-        exam_Date =   this.examForm.value.exam_date.toISOString();
+        const [month, day, year] = this.examForm.value.exam_date.toLocaleDateString().split('/');
+        exam_Date = `${year}-${month}-${day}`;
       }
 
      let  exam_data: any = {

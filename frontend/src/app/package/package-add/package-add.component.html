@@ -77,8 +77,27 @@
         <span *ngIf="packageForm.controls.group.errors">{{packageForm.controls.group.errors['api_error'] }}</span>
 
       </div>
+
       <!--      group end-->
 
+
+      <!--      package-->
+      <div class="col-12 col-sm-6 col-md-3">
+        <mat-form-field class="full-width">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="category">
+            <mat-option *ngFor="let label of category|keyvalue" [value]=label.key>{{ label.value   }} </mat-option>
+
+          </mat-select>
+          <mat-error *ngIf="packageForm.controls.category.invalid">
+            <span *ngIf="packageForm.controls.category.errors?.['required']">Category is required.</span>
+          </mat-error>
+        </mat-form-field>
+        <span *ngIf="packageForm.controls.category.errors">{{packageForm.controls.category.errors['api_error'] }}</span>
+
+      </div>
+
+      <!--      package end-->
 
       <div class="col-12 col-sm-6 col-md-3">
 

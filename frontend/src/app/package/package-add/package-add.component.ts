@@ -13,6 +13,7 @@ import {PackageService} from "../package.service";
 export class PackageAddComponent  implements OnInit{
 
   groups:any;
+  category:any;
   editMode:boolean = false;
   id:any;
 
@@ -27,6 +28,7 @@ export class PackageAddComponent  implements OnInit{
     package_start_date: new FormControl<Date |null>( null,[Validators.required]),
     package_end_date:  new FormControl<Date |null>( null,[Validators.required]),
     group: new FormControl('', [Validators.required]),
+    category: new FormControl('', [Validators.required]),
     published: new FormControl( false ),
   });
 
@@ -55,7 +57,8 @@ export class PackageAddComponent  implements OnInit{
   getConText(){
     this.packageService.getPackageAddContext().subscribe({
       next: (response)=>{
-        this.groups = response.groups;
+        this.groups = response.data.groups;
+        this.category = response.data.category;
       },
       error: (err)=>{
         console.log(err.status_code);
@@ -96,6 +99,7 @@ export class PackageAddComponent  implements OnInit{
       formData.append('number_of_exam', this.packageForm.value.number_of_exam || '');
 
       formData.append('group', this.packageForm.value.group || '');
+      formData.append('category', this.packageForm.value.category || '');
       formData.append('published', this.packageForm.value.published!.toString());
       formData.append('discount_start_date', this.packageForm.value.discount_start_date instanceof Date ? this.packageForm.value.discount_start_date.toISOString() : `${this.packageForm.value.discount_start_date}`);
       formData.append('discount_end_date', this.packageForm.value.discount_end_date instanceof Date ? this.packageForm.value.discount_end_date.toISOString() : `${this.packageForm.value.discount_end_date}`);

@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:mobile_app/Providers/favorite_provider.dart';
+import 'package:mobile_app/Providers/mcq_provider.dart';
 import 'package:mobile_app/Providers/notification_provider.dart';
 import 'package:mobile_app/Providers/package_provider.dart';
 import 'package:mobile_app/Providers/rutine_provider.dart';
-import 'package:mobile_app/Varsity/varsity_screen.dart';
+import 'package:mobile_app/screens/varsity_screen.dart';
 import 'package:mobile_app/authentication/login.dart';
-import 'package:mobile_app/favorite/favorite.dart';
-import 'package:mobile_app/freeExam/free_exam_screen.dart';
-import 'package:mobile_app/guccho/guccho_screen.dart';
-import 'package:mobile_app/hsc/hsc_screen.dart';
-import 'package:mobile_app/medical/medichal_screen.dart';
-import 'package:mobile_app/notification/notification_screen.dart';
-import 'package:mobile_app/participatedExam/participated_screen.dart';
-import 'package:mobile_app/profile/group_seclection.dart';
-import 'package:mobile_app/profile/profile_page_screen.dart';
-import 'package:mobile_app/questionBank/question_bank.dart';
-import 'package:mobile_app/subjectWise/subject_wise.dart';
+import 'package:mobile_app/screens/favorite_screen.dart';
+import 'package:mobile_app/screens/free_exam_screen.dart';
+import 'package:mobile_app/screens/guccho_screen.dart';
+import 'package:mobile_app/screens/hsc_screen.dart';
+import 'package:mobile_app/screens/medichal_screen.dart';
+import 'package:mobile_app/screens/notification_screen.dart';
+import 'package:mobile_app/screens/participated_screen.dart';
+import 'package:mobile_app/screens/profile_page_screen.dart';
+import 'package:mobile_app/screens/question_bank_screen.dart';
+import 'package:mobile_app/screens/subject_wise_screen.dart';
 import 'package:mobile_app/theme/theme_data.dart';
 import 'package:mobile_app/theme/theme_manager.dart';
 import 'package:mobile_app/utils/urtils.dart';
 import 'package:provider/provider.dart';
-import 'engineering/engineering_screen.dart';
-import 'homePage/homepage.dart';
-import 'package/package_screen.dart';
+import 'screens/engineering_screen.dart';
+import 'screens/home_page_screen.dart';
+import 'screens/package_screen.dart';
 
 
 main() async {
@@ -50,6 +50,7 @@ class _MyAppState extends State<MyApp> {
     ThemeManager _themeManager = ThemeManager();
     return  MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => McqProvider(),),
         ChangeNotifierProvider(create: (_) => PackageProvider(),),
         ChangeNotifierProvider(create: (_) => RoutineProvider(),),
         ChangeNotifierProvider(create: (_) => NotificationProvider(),),
@@ -62,8 +63,8 @@ class _MyAppState extends State<MyApp> {
           themeMode: _themeManager.themeMode,
         initialRoute: '/',
         routes: {
-          '/': (context) => widget.authenticated ? const HomePage(): LoginPage(),
-          HomePage.routeName: (context) => const HomePage(),
+          '/': (context) => widget.authenticated ? const HomePageScreen(): LoginPage(),
+          HomePageScreen.routeName: (context) => const HomePageScreen(),
           PackageScreen.routeName: (ctx) => const PackageScreen(),
           ProfileScreen.routeName: (ctx) => const ProfileScreen(),
           FreeExamScreen.routeName: (ctx) => const FreeExamScreen(),
@@ -77,13 +78,12 @@ class _MyAppState extends State<MyApp> {
           ParticipatedScreen.routeName: (ctx) => const ParticipatedScreen(),
           GucchoScreen.routeName: (ctx) => const GucchoScreen(),
           NotificationScreen.routeName: (ctx) =>  NotificationScreen(),
-          GroupSelectionScreen.routeName: (ctx) =>  GroupSelectionScreen(),
 
 
         },
         onUnknownRoute: (settings) {
           return MaterialPageRoute(
-            builder: (ctx) => const HomePage(),
+            builder: (ctx) => const HomePageScreen(),
           );
         },
 

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-const colorPrimary = Colors.deepPurple ;
-// const colorPrimary = Colors.orange;
+// const colorPrimary = Colors.deepPurple ;
+const colorPrimary = Colors.teal;
 
 
 const colorSecondary = Colors.teal;
+// const colorSecondary = Colors.deepPurple;
 const colorTextLight = Colors.white;
 const colorTextDark = Colors.black87;
 
@@ -19,13 +20,13 @@ ThemeData lightTheme = ThemeData(
 
 
   appBarTheme: AppBarTheme(
-      centerTitle: true,
+      centerTitle: false,
       color: colorPrimary,
       foregroundColor: colorTextLight
       // backgroundColor: colorSecondary
     ),
   inputDecorationTheme: InputDecorationTheme(
-    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+    contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
     filled: true,
     suffixIconColor: colorPrimary,
     fillColor: Colors.white,
@@ -34,10 +35,17 @@ ThemeData lightTheme = ThemeData(
       fontWeight: FontWeight.normal,
     ),
     hintStyle: const TextStyle(
-      color: Colors.black38,
+      color: Colors.black45,
     ),
     // enabledBorder: InputBorder.none,
     enabledBorder: OutlineInputBorder(
+      borderSide: const BorderSide(
+        color: Colors.white38,
+        width: 1.0,
+      ),
+      borderRadius: BorderRadius.circular(10.0),
+    ),
+    disabledBorder: OutlineInputBorder(
       borderSide: const BorderSide(
         color: Colors.white70,
         width: 1.0,
@@ -101,6 +109,11 @@ ThemeData lightTheme = ThemeData(
     collapsedBackgroundColor: Colors.white,
 
 
+  ),
+  dialogTheme:  DialogTheme(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10.0),
+    ),
   )
 
 );

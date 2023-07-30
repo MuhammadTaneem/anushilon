@@ -26,3 +26,15 @@ showSuccessMessage({required String msg,  gravity=ToastGravity.CENTER, fontSize=
     fontSize: fontSize,
   );
 }
+
+showHintMessage({required String msg,  gravity=ToastGravity.CENTER, fontSize=18.0, textColor=Colors.white, bgColor=Colors.grey}){
+  Fluttertoast.showToast(
+    msg: msg,
+    toastLength: Toast.LENGTH_LONG,
+    gravity: gravity,
+    timeInSecForIosWeb: 5,
+    backgroundColor: bgColor,
+    textColor: textColor,
+    fontSize: fontSize,
+  );
+}

@@ -4,7 +4,7 @@ from rest_framework.authentication import BasicAuthentication, TokenAuthenticati
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from django.db.models import Q, F
+from django.db.models import Q
 
 from utility.enum import hardness_enum_dict, category_enum_dict, subjects_enum_dict
 from .models import MCQ
@@ -27,9 +27,13 @@ class MCQView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAP
         queryset = super().get_queryset()
         subject = self.request.query_params.get('subject')
         if subject:
+            print("subject$"+subject)
+            print(queryset)
             queryset = queryset.filter(subject=subject)
+            print(queryset)
 
         chapter = self.request.query_params.get('chapter')
+        # print("chapter" + chapter)
         if chapter:
             queryset = queryset.filter(chapter=chapter)
 

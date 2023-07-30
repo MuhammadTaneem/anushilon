@@ -20,6 +20,7 @@ class PackageSerializer(serializers.ModelSerializer):
             'creator',
             'published',
             'group',
+            'category',
             'last_edit',
             'published',
             'create_date',

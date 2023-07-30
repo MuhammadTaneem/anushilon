@@ -1,5 +1,5 @@
 from django.db import models
-from utility.enum import GroupEnum
+from utility.enum import GroupEnum, PackageCategory
 
 
 class Package(models.Model):
@@ -15,6 +15,8 @@ class Package(models.Model):
     creator = models.ForeignKey('custom_user.CustomUser', on_delete=models.DO_NOTHING, null=True, blank=True)
     published = models.BooleanField(default=False)
     group = models.CharField(max_length=20, choices=[(group.name, group.value) for group in GroupEnum], null=False,
+                             blank=False)
+    category = models.CharField(max_length=20, choices=[(package.name, package.value) for package in PackageCategory], null=False,
                              blank=False)
     create_date = models.DateTimeField(auto_now_add=True)
     last_edit = models.DateTimeField(auto_now=True)

@@ -30,10 +30,11 @@
     <p>Package start date: {{ packageDetails.package_start_date  | date:'mediumDate'  }}</p>
     <p>Package End date: {{ packageDetails.package_end_date | date:'mediumDate'  }}</p>
     <p>Group: {{ packageDetails.group }}</p>
+    <p>Category: {{ packageDetails.category }}</p>
     <p>Discount amount: {{ packageDetails.discount_amount}}</p>
     <p>Discount start date: {{ packageDetails.discount_start_date  | date:'mediumDate' }}</p>
     <p>Discount End date: {{ packageDetails.discount_end_date | date:'mediumDate' }}</p>
-    <p>Problem Setter: {{ packageDetails.creator_name }}</p>
+    <p>Creat by: {{ packageDetails.creator_name }}</p>
 
     <p>Published: <mat-slide-toggle (change)="onToggleChange($event,'published')" [checked]="packageDetails.published"></mat-slide-toggle></p>
     <p>Create Date: {{ packageDetails.create_date  | date:'medium' }}</p>
