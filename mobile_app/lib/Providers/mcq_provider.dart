@@ -5,16 +5,18 @@ import 'package:mobile_app/utils/show_message.dart';
 import '../Database/sqflight.dart';
 import '../schema/mcq_schema.dart';
 import '../services/mcq_service.dart';
+import '../utils/json_formaor.dart';
 
 class McqProvider with ChangeNotifier {
   late int _count = 0;
-  final int _limit = 10;
+  final int _limit = 25;
   late int _pageNumber = 0;
   late String? subject;
   late String? subjectKey;
   late String? chapter;
   late bool _isLoading = false;
   late  List<McqType> _mcqList = [];
+
 
 
   Future<void> loadMcq() async {
@@ -30,16 +32,17 @@ class McqProvider with ChangeNotifier {
         'published': 'True',
       };
       Response response = await getMcq(data);
-
+      print(jsonDecode(response.body));
       if (response.statusCode == 200) {
-        var aa = jsonDecode(response.body);
+        var aa =  jsonDecode(response.body, reviver: reviver);
         _count = aa['count'];
         _mcqList = parseMcqList(aa['results']);
       } else {
         showErrorMessage(msg: "সার্ভারে সমস্যা হয়েছে, পুনঃরায় চেস্টা করুন");
       }
     }catch(error){
-      showErrorMessage(msg: "সার্ভারে সমস্যা হয়েছে, পুনঃরায় চেস্টা করুন");
+      print("$error");
+      showErrorMessage(msg: "সার্ভারে সমস্যা হয়েছে,, পুনঃরায় চেস্টা করুন");
     }
     _isLoading = false;
     notifyListeners();

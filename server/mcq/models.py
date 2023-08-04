@@ -14,7 +14,7 @@ class MCQ(models.Model):
     option_img_3 = models.ImageField(upload_to='mcq', null=True, blank=True)
     option_text_4 = models.CharField(max_length=100, null=True, blank=True)
     option_img_4 = models.ImageField(upload_to='mcq', null=True, blank=True)
-    correct_ans = models.CharField(max_length=100)
+    correct_ans = models.IntegerField()
     explanation = models.TextField()
     explanation_img = models.ImageField(upload_to='mcq', null=True, blank=True)
     hardness = models.CharField(max_length=100)

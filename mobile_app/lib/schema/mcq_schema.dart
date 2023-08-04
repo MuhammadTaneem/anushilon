@@ -2,7 +2,6 @@
 class McqType{
   late int id;
   late int point;
-  late bool multiChose;
   late bool isFavorite;
   late bool showAns;
   late String question;
@@ -15,7 +14,6 @@ class McqType{
   McqType({
     required this.id,
     required this.point,
-    required this.multiChose,
     this.isFavorite = false,
     this.showAns = false,
     required this.question,
@@ -28,7 +26,6 @@ class McqType{
     return {
       'id': id,
       'point': point,
-      'multiChose': multiChose ? 1 : 0,
       'isFavorite': isFavorite ? 1 : 0,
       'showAns': showAns ? 1 : 0,
       'question': question,
@@ -42,7 +39,6 @@ class McqType{
     return McqType(
       id: map['id'],
       point: map['point'],
-      multiChose: map['multiChose'] == 1,
       isFavorite: map['isFavorite'] == 1,
       showAns: map['showAns'] == 1,
       question: map['question'],
@@ -94,14 +90,13 @@ McqType parseMcq(Map<String, dynamic> json) {
   for (int i = 1; i <= 4; i++) {
     String? text = json['option_text_$i'];
     String? imageUrl = json['option_img_$i'];
-    bool correct = i == int.parse(json['correct_ans']);
+    bool correct = i == json['correct_ans'];
     options.add(OptionType(id: i, text: text, imageUrl: imageUrl, correct: correct));
   }
 
   return McqType(
     id: json['id'],
     point: 0, // Set the appropriate value for point if available in the JSON
-    multiChose: false, // Set the appropriate value for multiChose if available in the JSON
     isFavorite: false,
     showAns: false,
     question: json['question'],

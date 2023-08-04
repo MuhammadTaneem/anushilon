@@ -19,12 +19,12 @@ class SubjectWiseScreen extends StatefulWidget {
 }
 
 class _SubjectWiseScreenState extends State<SubjectWiseScreen> {
-  bool isFilterOpen = false;
+  bool isFilterOpen = true;
   bool _autoValidate = false;
   String? _selectedSubject;
   String? _selectedSubjectKey;
   String? _selectedChapter;
-  int limit = 10;
+  int limit = 25;
   // int offset = 0;
   int pageNumber = 0;
   final Map<String, dynamic> _subjects = ContextOptions().subjects;
@@ -187,18 +187,20 @@ class _SubjectWiseScreenState extends State<SubjectWiseScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    final  count = Provider.of<McqProvider>(context, listen: false).count;
+    if(count<1){
+      isFilterOpen = true;
+    }
+    else{
+      isFilterOpen = false;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     late McqProvider _provider = Provider.of<McqProvider>(context, listen: true);
     pageNumber = _provider.getPage;
-    if(_provider.count<1){
-      isFilterOpen = true;
-    }
-    else{
-      isFilterOpen = false;
-    }
+
 
 
     return Scaffold(
@@ -212,7 +214,9 @@ class _SubjectWiseScreenState extends State<SubjectWiseScreen> {
             onPressed: () {
               setState(() {
                 isFilterOpen = !isFilterOpen;
+                print(isFilterOpen);
               });
+
             },
           ),
         ],
@@ -343,9 +347,9 @@ class _SubjectWiseScreenState extends State<SubjectWiseScreen> {
                     child: CentralLoading(),
                   ),
                 )
-              : Expanded(child: ReadMcqScreen(mcqList: _provider.items)),
+              : Expanded(child: _provider.count>0? ReadMcqScreen(screen: 'mcq',): !isFilterOpen? const Center(child: Text("প্রশ্ন খুজে পাওয়া যায় নি")):Container()),
 
-          Row(
+          _provider.count>0?Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Adjust the alignment as needed
             children: [
               const Gap(10),
@@ -395,7 +399,7 @@ class _SubjectWiseScreenState extends State<SubjectWiseScreen> {
               ]
 
             ],
-          )
+          ):Container()
 
         ],
       ),

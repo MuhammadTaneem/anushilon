@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'custom_user',
+    'exam_submittion',
     'package',
     'exam',
     'mcq',

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../widgets/exam_package_view.dart';
 
 class VarsityScreen extends StatelessWidget {
@@ -8,6 +7,7 @@ class VarsityScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("ভার্সিটি"),
@@ -16,7 +16,7 @@ class VarsityScreen extends StatelessWidget {
       body: const Padding(
         padding: EdgeInsets.symmetric(vertical: 30,horizontal: 10),
         child: Column(children: [
-          ExamPackageView(category: 'varsity',)
+          Expanded(child: ExamPackageView(category: 'varsity',))
         ],),
       ),
     );

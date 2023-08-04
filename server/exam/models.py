@@ -10,7 +10,8 @@ class Exam(models.Model):
     exam_number = models.IntegerField(null=False, blank=False)
     number_of_question = models.IntegerField(null=False, blank=False)
     duration = models.IntegerField(null=False, blank=False)
-    point = models.IntegerField(null=False, blank=False)
+    point = models.IntegerField(null=False, blank=False, default=1)
+    penalty = models.FloatField(null=True, blank=True, default=0.25)
     exam_date = models.DateField(null=False, blank=False)
     package = models.ForeignKey(Package, on_delete=models.DO_NOTHING, null=False, blank=False)
     creator = models.ForeignKey(CustomUser, on_delete=models.DO_NOTHING, null=False, blank=False)
@@ -24,6 +25,7 @@ class Exam(models.Model):
         if self.creator:
             return self.creator.full_name
         return None
+
     def package_name(self):
         if self.package:
             return self.package.name
@@ -33,4 +35,3 @@ class Exam(models.Model):
         related_objects = self.mcq_list.all()
         related_ids = related_objects.values()
         return related_ids
-

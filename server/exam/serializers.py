@@ -16,6 +16,7 @@ class ExamSerializer(serializers.ModelSerializer):
             'number_of_question',
             'duration',
             'point',
+            'penalty',
             'exam_date',
             'package',
             'creator',
@@ -34,15 +35,20 @@ class ExamSerializer(serializers.ModelSerializer):
         required=False,
     )
 
-    # def to_internal_value(self, data):
-    #
-    #     import pdb;pdb.set_trace()
-    #     if 'mcq_list' in data:
-    #         mcq_list = data['mcq_list']
-    #         if isinstance(mcq_list, str):
-    #             # Convert a comma-separated string to a list of integers
-    #             mcq_list = [int(mcq_id) for mcq_id in mcq_list.split(',')]
-    #
-    #         data['mcq_list'] = mcq_list
-    #
-    #     return super().to_internal_value(data)
+
+class ExamRoutineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Exam
+        fields = (
+            'id',
+            'syllabus',
+            'exam_number',
+            'number_of_question',
+            'duration',
+            'point',
+            'penalty',
+            'exam_date',
+            'package',
+            'package_name',
+        )
+

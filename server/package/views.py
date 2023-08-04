@@ -7,6 +7,7 @@ from rest_framework.authentication import BasicAuthentication, TokenAuthenticati
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from exam.models import Exam
+from exam_submittion.models import ExamSubmission
 from utility.enum import group_enum_dict, package_category_enum_dict
 from .models import Package
 from .serializers import PackageSerializer
@@ -72,68 +73,36 @@ def get_package_add_context(request):
 
     except Exception as e:
         return JsonResponse(
-            {"status_code": 500, "status": 'Failed', "message": 'Internal server error', "error": str(e)}, status=500) \
+            {"status_code": 500, "status": 'Failed', "message": 'Internal server error', "error": str(e)},
+            status=500)
+
 
 @require_GET
 def get_exam_package(request):
     try:
         category = request.GET.get('category', None)
+        student = request.GET.get('student', None)
         packages = Package.objects.filter(category=category, published=True)
 
         data = []
 
         for package in packages:
-
+            print(f'package{package}')
             exam = Exam.objects.filter(package=package, published=True, exam_date=date.today()).first()
 
             # exam = Exam.objects.filter(package=package, published=True, exam_date__date=date.today()).first()
             print(f'exam {exam}')
-            exam_data = {'id': package.id, 'name': package.name, 'exam_id': exam.id if exam else None}
+            student_exam = None
+            if exam:
+                student_exam = ExamSubmission.objects.filter(exam_id=exam.id, student_id=student).first()
+
+            exam_data = {'id': package.id, 'name': package.name, 'exam_id': exam.id if exam else None,
+                         'submitted': student_exam.id if student_exam else None}
             data.append(exam_data)
 
-        return JsonResponse({'status': 200, 'message': 'context loaded', 'data': data})
+        return JsonResponse({'status': 200, 'message': 'data loaded', 'results': data})
 
     except Exception as e:
         return JsonResponse(
             {"status_code": 500, "status": 'Failed', "message": 'Internal server error', "error": str(e)}, status=500)
 
-# class GetPackageAndTodayExamView(RetrieveAPIView):
-#     serializer_class = PackageSerializer
-#     queryset = Package.objects.all()
-#
-#     def get_queryset(self):
-#         category = self.request.query_params.get('category', None)
-#         if category:
-#             try:
-#                 Package.objects.filter(category=category, published=True).all()
-#                 # exam = Exam.objects.filter(package=package, date=date.today()).first()
-#                 # if exam:
-#                 #     return Exam.objects.filter(pk=exam.pk)  # Return the exam queryset
-#                 # else:
-#                 #     return Package.objects.filter(pk=package.pk)  # Return the package queryset
-#                 return
-#             except Package.DoesNotExist:
-#                 pass
-#
-#         return Package.objects.none()
-#
-#     def get_object(self):
-#         category = self.request.query_params.get('category', None)
-#         if category:
-#             try:
-#                 packages = Package.objects.filter(category=category, published=True).all()
-#                 # exam = Exam.objects.filter(package=package, date=date.today(), published=True).first()
-#                 # if exam:
-#                 #     return exam
-#                 # else:
-#                 #     # If there is no exam today, return the package information
-#                 #     return package
-#                 return packages
-#             except Package.DoesNotExist:
-#                 pass
-#
-#         return None
-#
-#
-#
-#

@@ -4,7 +4,7 @@ import 'package:mobile_app/Providers/favorite_provider.dart';
 import 'package:mobile_app/Providers/mcq_provider.dart';
 import 'package:mobile_app/Providers/notification_provider.dart';
 import 'package:mobile_app/Providers/package_provider.dart';
-import 'package:mobile_app/Providers/rutine_provider.dart';
+import 'package:mobile_app/Providers/routine_provider.dart';
 import 'package:mobile_app/screens/varsity_screen.dart';
 import 'package:mobile_app/authentication/login.dart';
 import 'package:mobile_app/screens/favorite_screen.dart';
@@ -21,6 +21,8 @@ import 'package:mobile_app/theme/theme_data.dart';
 import 'package:mobile_app/theme/theme_manager.dart';
 import 'package:mobile_app/utils/urtils.dart';
 import 'package:provider/provider.dart';
+import 'Providers/exam_package_provider.dart';
+import 'Providers/exam_provider.dart';
 import 'screens/engineering_screen.dart';
 import 'screens/home_page_screen.dart';
 import 'screens/package_screen.dart';
@@ -55,6 +57,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => RoutineProvider(),),
         ChangeNotifierProvider(create: (_) => NotificationProvider(),),
         ChangeNotifierProvider(create: (_) => FavoriteProvider(),),
+        ChangeNotifierProvider(create: (_) => ExamProvider(),),
+        ChangeNotifierProvider(create: (_) => ExamPackageProvider(),),
       ],
       child: MaterialApp(
           title: 'অনুশীলন',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/Providers/favorite_provider.dart';
 import 'package:mobile_app/schema/mcq_schema.dart';
+import 'package:mobile_app/widgets/loader_widget.dart';
 import 'package:mobile_app/widgets/read_mcq_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +28,8 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       ),
       body: Column(
         children: [
-          Expanded(child: ReadMcqScreen(mcqList: _provider.items)),
+          _provider.isLoading? CentralLoading():
+          _provider.items.length >0? Expanded(child: ReadMcqScreen(screen:'favorite')): Expanded(child: Center(child: Text("আপনি কোন ফ্যাভারিট লিস্টে কোন প্রশ্ন পাওয়া যায় নি"))) ,
         ],
       ),
     );

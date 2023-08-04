@@ -11,3 +11,19 @@ clearStorage() async {
   await storage.ready;
   storage.clear();
 }
+
+
+String queryParamsSetter(data,String apiUrl){
+  bool firstQur = true;
+
+  data.forEach((key, value) {
+    if (firstQur) {
+      apiUrl += '?$key=$value';
+      firstQur = false;
+    } else {
+      apiUrl += '&$key=$value';
+    }
+  });
+
+  return apiUrl;
+}

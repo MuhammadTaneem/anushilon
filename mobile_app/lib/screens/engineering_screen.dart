@@ -16,7 +16,7 @@ class EngineeringScreen extends StatelessWidget {
       body:   const Padding(
         padding: EdgeInsets.symmetric(vertical: 30,horizontal: 10),
         child: Column(children: [
-          ExamPackageView(category: 'engineering',)
+          Expanded(child: ExamPackageView(category: 'engineering',))
         ],),
       ),
     );

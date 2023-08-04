@@ -54,7 +54,7 @@
 
         <div class="col-12 col-sm-6 col-md-3">
           <mat-form-field class="full-width">
-            <mat-label>Exam duration</mat-label>
+            <mat-label>Exam duration in minutes</mat-label>
             <input matInput type="text" formControlName="duration">
             <mat-error *ngIf="examForm.controls.duration.invalid">
               <span *ngIf="examForm.controls.duration.errors?.['required']">duration is required.</span>
@@ -74,22 +74,17 @@
           <span *ngIf="examForm.controls.point.errors">{{examForm.controls.point.errors['api_error'] }}</span>
         </div>
 
+        <div class="col-12 col-sm-6 col-md-3">
+          <mat-form-field class="full-width">
+            <mat-label>Wrong ans penalty</mat-label>
+            <input matInput type="text" formControlName="penalty">
+            <mat-error *ngIf="examForm.controls.penalty.invalid">
+              <span *ngIf="examForm.controls.penalty.errors?.['required']">penalty is required.</span>
+            </mat-error>
+          </mat-form-field>
+          <span *ngIf="examForm.controls.penalty.errors">{{examForm.controls.penalty.errors['api_error'] }}</span>
+        </div>
 
-<!--        <div class="col-12 col-sm-6 col-md-3">-->
-<!--          <mat-form-field class="full-width">-->
-<!--            <mat-label>Package</mat-label>-->
-<!--            <mat-select formControlName="package">-->
-<!--              <mat-option *ngFor="let label of packages|keyvalue"-->
-<!--                          [value]=label.key>{{ label.value   }} </mat-option>-->
-<!--            </mat-select>-->
-<!--            <mat-error *ngIf="examForm.controls.package.invalid">-->
-<!--              <span *ngIf="examForm.controls.package.errors?.['required']">package is required.</span>-->
-<!--            </mat-error>-->
-<!--          </mat-form-field>-->
-<!--          <span-->
-<!--            *ngIf="examForm.controls.package.errors">{{examForm.controls.package.errors['api_error'] }}</span>-->
-
-<!--        </div>-->
 
         <div class="col-12 col-sm-6 col-md-3">
           <mat-form-field class="full-width">
@@ -103,21 +98,6 @@
           </mat-form-field>
 <!--          <span *ngIf="examForm.controls.package.errors">{{examForm.controls.package.errors['api_error'] }}</span>-->
         </div>
-
-<!--        <div class="col-12 col-sm-6 col-md-3">-->
-<!--          <mat-form-field class="full-width">-->
-<!--            <mat-label>Hardness</mat-label>-->
-<!--            <mat-select formControlName="package">-->
-<!--              <mat-option *ngFor="let label of packages|keyvalue" [value]=label.key>{{ label.value   }} </mat-option>-->
-
-<!--            </mat-select>-->
-<!--            <mat-error *ngIf="examForm.controls.package.invalid">-->
-<!--              <span *ngIf="examForm.controls.package.errors?.['required']">packages is required.</span>-->
-<!--            </mat-error>-->
-<!--          </mat-form-field>-->
-<!--          <span *ngIf="examForm.controls.package.errors">{{examForm.controls.package.errors['api_error'] }}</span>-->
-
-<!--        </div>-->
 
 
 
@@ -166,6 +146,8 @@
 
 
       </div>
+
+
 
 
       <div class="row mb-5  mt-4">

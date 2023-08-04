@@ -39,7 +39,8 @@ export class ExamAddComponent implements OnInit{
     exam_number: new FormControl(null, Validators.required),
     number_of_question: new FormControl(null, Validators.required),
     duration: new FormControl(null, Validators.required),
-    point: new FormControl(null, Validators.required),
+    point: new FormControl(1, Validators.required),
+    penalty: new FormControl(0.25, Validators.required),
     exam_date: new FormControl(Validators.required),
     package: new FormControl( Validators.required),
     mcq_list: new FormControl(),
@@ -228,10 +229,11 @@ export class ExamAddComponent implements OnInit{
         number_of_question: this.examForm.value.number_of_question,
         duration: this.examForm.value.duration,
         point: this.examForm.value.point,
+        penalty: this.examForm.value.penalty,
         exam_date: exam_Date,
         package: this.examForm.value.package,
         mcq_list: mcqIdList,
-        published: this.examForm.value.published!.toString()
+        published: this.examForm.value.published!.toString(),
       };
 
       if(this.editMode){

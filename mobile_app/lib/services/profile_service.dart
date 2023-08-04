@@ -2,16 +2,17 @@ import 'dart:convert';
 
 import 'package:localstorage/localstorage.dart';
 
+import '../authentication/login.dart';
 import '../utils/connectivityCheck.dart';
 import '../utils/constants.dart';
 import '../utils/show_message.dart';
 import '../utils/urtils.dart';
 import 'package:http/http.dart' as http;
 
-
-Map<String, String> get headers => {
-      'Content-Type': 'application/json; charset=UTF-8',
-    };
+//
+// Map<String, String> get headers => {
+//       'Content-Type': 'application/json; charset=UTF-8',
+//     };
 
 responseTOStorage(response) async {
   var body = jsonDecode(response.body);
@@ -63,7 +64,6 @@ updateProfile(data) async {
   } catch (error) {
     final LocalStorage storage = await getStorage();
 
-    showErrorMessage(msg: 'সার্ভারে সমস্যা হয়েছে');
     storage.setItem("isAuthorized", false);
 
     print('Login error: $error');
