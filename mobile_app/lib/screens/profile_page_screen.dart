@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
@@ -80,33 +81,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
         SingleChildScrollView(
           child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 50, bottom: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  profileUrl!=null?
-                  CachedNetworkImage(
-                    imageUrl: profileUrl??'',
-                    imageBuilder: (context, imageProvider) => CircleAvatar(
-                      radius: 80,
-                      backgroundImage: imageProvider,
-                    ),
-                    placeholder: (context, url) => SpinKitSpinningLines(
-                      color: Theme.of(context).colorScheme.secondary,
-                      size: 60.0,
-                    ), // Show loading indicator
-                    errorWidget: (context, url, error) => const CircleAvatar(
-                      radius: 80,
-                      backgroundImage: AssetImage('assets/images/pp.png'), // Show alternative image on error
-                    ),
-                  ):Container(),
+            Gap(30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                profileUrl!=null?
+                CachedNetworkImage(
+                  imageUrl: profileUrl??'',
+                  imageBuilder: (context, imageProvider) => CircleAvatar(
+                    radius: 80,
+                    backgroundImage: imageProvider,
+                  ),
+                  placeholder: (context, url) => SpinKitSpinningLines(
+                    color: Theme.of(context).colorScheme.secondary,
+                    size: 60.0,
+                  ), // Show loading indicator
+                  errorWidget: (context, url, error) => const CircleAvatar(
+                    radius: 80,
+                    backgroundImage: AssetImage('assets/images/pp.png'), // Show alternative image on error
+                  ),
+                ):Container(),
 
 
-                ],
-              ),
+              ],
             ),
+            const Gap(20),
             Text(name??'', style: Theme.of(context).textTheme.headlineSmall),
+            const Gap(5),
             Text("ইমেইল : ${email??''}"),
             Text("ব্যালেন্স :${banglaNumberFormat.format(balance)} টাকা",),
             // Text("ব্যালেন্স : 123 taka"),

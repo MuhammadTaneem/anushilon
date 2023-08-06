@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../authentication/login.dart';
 import '../utils/connectivityCheck.dart';
@@ -19,6 +20,9 @@ getMcq(Map<String, dynamic> data ) async {
         return  await http.get( uri,headers: headers);
     }
   } catch (error) {
+    if (kDebugMode) {
+      print(error);
+    }
   }
 
 }

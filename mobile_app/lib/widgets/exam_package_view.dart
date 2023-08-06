@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/Providers/exam_package_provider.dart';
-import 'package:mobile_app/schema/exam_package_schema.dart';
 import 'package:mobile_app/widgets/loader_widget.dart';
 import 'package:provider/provider.dart';
 import 'exam_package.dart';
@@ -30,7 +29,7 @@ class _ExamPackageViewState extends State<ExamPackageView> {
     ExamPackageProvider _provider =Provider.of<ExamPackageProvider>(context, listen: true);
     return Scaffold(
       body: _provider.isLoading
-          ? CentralLoading()
+          ? const CentralLoading()
           : _provider.items.length < 1
               ? Center(child: Text("এই মডিউলে কোন প্যাকেজ নাই"))
               : GridView.builder(

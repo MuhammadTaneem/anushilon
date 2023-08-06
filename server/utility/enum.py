@@ -156,4 +156,5 @@ class PackageCategory(Enum):
     medical = "Medical"
     engineering = "Engineering"
     free_exam = "Free Exam"
+    hsc = "Hsc"
     guccho = "Guccho"

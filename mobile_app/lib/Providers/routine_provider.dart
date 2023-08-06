@@ -36,10 +36,10 @@ class RoutineProvider with ChangeNotifier {
         var aa =  jsonDecode(response.body, reviver: reviver);
         _routine =  parseRoutineList(aa);
       } else {
-        showErrorMessage(msg: "সার্ভারে সমস্যা হয়েছে, পুনঃরায় চেস্টা করুন");
+        showErrorMessage(msg: "সমস্যার জন্য আন্তরিকভাবে দুক্ষিত, দয়াকরে পুনঃরায় চেস্টা করুন");
       }
     }catch(error){
-      showErrorMessage(msg: "সার্ভারে সমস্যা হয়েছে,, পুনঃরায় চেস্টা করুন");
+      showErrorMessage(msg: "সার্ভারে সমস্যার জন্য আন্তরিকভাবে দুক্ষিত");
     }
     _isLoading = false;
     notifyListeners();

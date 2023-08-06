@@ -102,6 +102,7 @@ class _ExamPackageWidgetState extends State<ExamPackageWidget>
                             widget.examPackageLiveExamId != null
                                 ? widget.submitted == null? Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => GiveExamWidget(
+
                                         examId:
                                             widget.examPackageLiveExamId ?? 0)))
                             :showDialog(

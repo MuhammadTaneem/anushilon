@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:mobile_app/Providers/mcq_provider.dart';
-import 'package:mobile_app/schema/mcq_schema.dart';
 import 'package:mobile_app/widgets/read_mcq_screen.dart';
 import 'package:provider/provider.dart';
 import '../Database/context_data.dart';
@@ -113,7 +112,7 @@ class _SubjectWiseScreenState extends State<SubjectWiseScreen> {
           actionsPadding: EdgeInsets.zero,
           contentPadding: EdgeInsets.zero,
           buttonPadding: EdgeInsets.zero,
-          titlePadding: EdgeInsets.only(left: 0),
+          titlePadding: const EdgeInsets.only(left: 0),
           title: Container(
             color: Theme.of(context).colorScheme.primary,
             child: Row(
@@ -173,10 +172,6 @@ class _SubjectWiseScreenState extends State<SubjectWiseScreen> {
       });
     }
   }
-  //
-  // makeFavorite(mcq){
-  //   Provider.of<McqProvider>(context, listen: false).addItem(mcq) ;
-  // }
 
   _onSubmit() {
     isFilterOpen = false;
@@ -214,7 +209,6 @@ class _SubjectWiseScreenState extends State<SubjectWiseScreen> {
             onPressed: () {
               setState(() {
                 isFilterOpen = !isFilterOpen;
-                print(isFilterOpen);
               });
 
             },
@@ -341,14 +335,19 @@ class _SubjectWiseScreenState extends State<SubjectWiseScreen> {
               ),
             ),
           ],
-          _provider.isLoading
-              ? const Expanded(
-                  child: Center(
-                    child: CentralLoading(),
-                  ),
-                )
-              : Expanded(child: _provider.count>0? ReadMcqScreen(screen: 'mcq',): !isFilterOpen? const Center(child: Text("প্রশ্ন খুজে পাওয়া যায় নি")):Container()),
-
+          if(_provider.isLoading)...[
+            const Expanded(
+              child: Center(
+                child: CentralLoading(),
+              ),
+            )
+          ],
+          if(!_provider.isLoading && _provider.count>0)...[
+            ReadMcqScreen(screen: 'mcq')
+          ],
+          if(!_provider.isLoading && _provider.count==0 && !isFilterOpen )...[
+            const Expanded( child: Center(child: Text("প্রশ্ন খুজে পাওয়া যায় নি")),)
+          ],
           _provider.count>0?Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Adjust the alignment as needed
             children: [
@@ -386,7 +385,7 @@ class _SubjectWiseScreenState extends State<SubjectWiseScreen> {
 
                         // Add your button 2 functionality here
                       },
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('Next Page'),

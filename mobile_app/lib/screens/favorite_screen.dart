@@ -29,7 +29,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
       body: Column(
         children: [
           _provider.isLoading? CentralLoading():
-          _provider.items.length >0? Expanded(child: ReadMcqScreen(screen:'favorite')): Expanded(child: Center(child: Text("আপনি কোন ফ্যাভারিট লিস্টে কোন প্রশ্ন পাওয়া যায় নি"))) ,
+          _provider.items.length >0? ReadMcqScreen(screen:'favorite'): Expanded(child: Center(child: Text("আপনি কোন ফ্যাভারিট লিস্টে কোন প্রশ্ন পাওয়া যায় নি"))) ,
         ],
       ),
     );

@@ -33,22 +33,26 @@ class _ReadMcqScreenState extends State<ReadMcqScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.screen == 'favorite') {
-      mcqList = Provider.of<FavoriteProvider>(context, listen: false).items;
-      showAnswers = List<bool>.filled(mcqList.length, false);
-      showExplanation = List.from(showAnswers);
-    } else {
-      mcqList = Provider.of<McqProvider>(context, listen: false).items;
-      showAnswers = List<bool>.filled(mcqList.length, false);
-      showExplanation = List.from(showAnswers);
-    }
+    // if (widget.screen == 'favorite') {
+    //   mcqList = Provider.of<FavoriteProvider>(context, listen: false).items;
+    //   // showAnswers = List<bool>.filled(mcqList.length, false);
+    //   // showExplanation = List.from(showAnswers);
+    // } else {
+    //   mcqList = Provider.of<McqProvider>(context, listen: false).items;
+    //   // showAnswers = List<bool>.filled(mcqList.length, false);
+    //   // showExplanation = List.from(showAnswers);
+    // }
+    mcqList =  widget.screen == 'favorite'?  Provider.of<FavoriteProvider>(context, listen: false).items:Provider.of<McqProvider>(context, listen: false).items;
+    showAnswers = List<bool>.filled(mcqList.length, false);
+    showExplanation = List.from(showAnswers);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView.separated(
+    return Expanded(
+      child: ListView.separated(
         shrinkWrap: true,
+        // physics: NeverScrollableScrollPhysics(),
         itemCount: mcqList.length,
         separatorBuilder: (BuildContext context, int index) =>
         const Gap(10),
@@ -82,12 +86,14 @@ class _ReadMcqScreenState extends State<ReadMcqScreen> {
                     ),
                   ),
 
-                  ListView.builder(
+                  ListView.separated(
                     shrinkWrap: true,
                     primary: false,
                     itemCount: mcqList[index].options.length,
+                    separatorBuilder: (BuildContext context, int index) =>
+                    const Gap(0),
                     itemBuilder: (context, optionIndex) {
-                      final option = mcqList[index].options[optionIndex];
+                      final OptionType option = mcqList[index].options[optionIndex];
 
                       return Row(
                         children: [

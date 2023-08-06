@@ -70,11 +70,10 @@ class ExamProvider with ChangeNotifier {
         _exam = ExamType.fromMap(aa);
         print(_exam);
       } else {
-        showErrorMessage(msg: "সার্ভারে সমস্যা হয়েছে, পুনঃরায় চেস্টা করুন");
+        showErrorMessage(msg: "সমস্যার জন্য আন্তরিকভাবে দুক্ষিত, দয়াকরে পুনঃরায় চেস্টা করুন");
       }
     }catch(error){
-      print("$error");
-      showErrorMessage(msg: "সার্ভারে সমস্যা হয়েছে,, পুনঃরায় চেস্টা করুন");
+      showErrorMessage(msg: "সার্ভারে সমস্যার জন্য আন্তরিকভাবে দুক্ষিত");
     }
     _isLoading = false;
     notifyListeners();

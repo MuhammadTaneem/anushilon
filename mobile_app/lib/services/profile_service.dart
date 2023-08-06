@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:localstorage/localstorage.dart';
 
 import '../authentication/login.dart';
@@ -51,8 +52,9 @@ updateProfile(data) async {
           }
         }).catchError((error) {
           showErrorMessage(msg: "আপডেট ব্যার্থ হয়েছে, পুনঃরায় চেস্টা করুন");
-          // Handle the error
-          print('Error: $error');
+          if (kDebugMode) {
+            print('Login error: $error');
+          }
         });
       } else {
         final LocalStorage storage = await getStorage();
@@ -63,9 +65,9 @@ updateProfile(data) async {
     // debugPrint("user is ");
   } catch (error) {
     final LocalStorage storage = await getStorage();
-
     storage.setItem("isAuthorized", false);
-
-    print('Login error: $error');
+    if (kDebugMode) {
+      print('Login error: $error');
+    }
   }
 }

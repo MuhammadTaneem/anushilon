@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../widgets/exam_package.dart';
+import '../widgets/exam_package_view.dart';
 
 class FreeExamScreen extends StatelessWidget {
   static const routeName = '/free_exam_screen';
@@ -12,7 +11,12 @@ class FreeExamScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("ফ্রী পরিক্ষা"),
       ),
-      body: ExamPackageWidget(examPackageId: 1)
+      body:   const Padding(
+        padding: EdgeInsets.symmetric(vertical: 30,horizontal: 10),
+        child: Column(children: [
+          Expanded(child: ExamPackageView(category: 'free_exam',))
+        ],),
+      ),
     );
   }
 }

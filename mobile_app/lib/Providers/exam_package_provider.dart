@@ -41,13 +41,14 @@ class ExamPackageProvider with ChangeNotifier {
 
         _examPackageList =  parseExamPackageList(jsonDecode(response.body)['results']);
       } else {
-        _examPackageList = [];
-        showErrorMessage(msg: "সার্ভারে সমস্যা হয়েছে, পুনঃরায় চেস্টা করুন");
+        _examPackageList=[];
+        showErrorMessage(msg: "সমস্যার জন্য আন্তরিকভাবে দুক্ষিত, দয়াকরে পুনঃরায় চেস্টা করুন");
       }
     }catch(error){
-      _examPackageList = [];
-      showErrorMessage(msg: "সার্ভারে সমস্যা হয়েছে, পুনঃরায় চেস্টা করুন");
+      _examPackageList=[];
+      showErrorMessage(msg: "সার্ভারে সমস্যার জন্য আন্তরিকভাবে দুক্ষিত");
     }
+
     _isLoading = false;
     notifyListeners();
   }

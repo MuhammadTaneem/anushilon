@@ -8,8 +8,8 @@ class ExamSubmission(models.Model):
     student = models.ForeignKey(Student, on_delete=models.DO_NOTHING, null=False, blank=False)
     exam = models.ForeignKey(Exam, on_delete=models.DO_NOTHING, null=False, blank=False)
     mcq_list = models.ManyToManyField(MCQ, through='MCQSubmission')
-    point = models.IntegerField(null=True,blank=False,default=0)
-    penalty = models.FloatField(null=True,blank=False,default=0)
+    point = models.IntegerField(null=True, blank=False, default=0)
+    penalty = models.FloatField(null=True, blank=False, default=0)
     create_date = models.DateTimeField(auto_now_add=True)
     last_edit = models.DateTimeField(auto_now=True)
 

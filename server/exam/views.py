@@ -123,3 +123,7 @@ def get_exam_add_context(request):
     except Exception as e:
         return JsonResponse(
             {"status_code": 500, "status": 'Failed', "message": 'Internal server error', "error": str(e)}, status=500)
+
+
+
+
