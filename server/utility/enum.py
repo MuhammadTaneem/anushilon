@@ -17,6 +17,14 @@ def category_enum_dict():
     return {e.name: e.value for e in McqCategory}
 
 
+def varsity_enum_dict():
+    return {e.name: e.value for e in VarsityList}
+
+
+def varsity_unit_enum_dict():
+    return {e.name: e.value for e in VarsityUnit}
+
+
 def subjects_enum_dict():
     return {
         'পদার্থ বিজ্ঞান ১ম পত্র': {
@@ -158,3 +166,17 @@ class PackageCategory(Enum):
     free_exam = "Free Exam"
     hsc = "Hsc"
     guccho = "Guccho"
+
+
+class VarsityList(Enum):
+    du = 'ঢাবি'
+    cu = 'চাবি'
+    ru = 'রাবি'
+
+
+class VarsityUnit(Enum):
+    ka = "ক"
+    kha = "খ"
+    ga = 'গ'
+    gha = 'ঘ'
+    cha = 'চ'

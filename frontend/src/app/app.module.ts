@@ -15,6 +15,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./auth/auth.interceptor";
 import {ExamModule} from "./exam/exam.module";
 import {CouponModule} from "./coupon/coupon.module";
+import { QuestionBankComponent } from './question-bank/question-bank.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import {CouponModule} from "./coupon/coupon.module";
     HomepageComponent,
     AppbarComponent,
     FooterComponent,
+    QuestionBankComponent,
 
 
   ],

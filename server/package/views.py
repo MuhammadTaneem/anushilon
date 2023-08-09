@@ -106,24 +106,3 @@ def get_exam_package(request):
         return JsonResponse(
             {"status_code": 500, "status": 'Failed', "message": 'Internal server error', "error": str(e)}, status=500)
 
-
-@require_GET
-def get_free_exam_package(request):
-    try:
-        student = request.GET.get('student', None)
-        package = Package.objects.filter(category='free_exam', published=True).order_by('id').first()
-        student_exam = None
-        exam = None
-        if package:
-            exam = Exam.objects.filter(package=package, published=True, exam_date=date.today()).first()
-        if exam:
-            student_exam = ExamSubmission.objects.filter(exam_id=exam.id, student_id=student).first()
-
-        exam_data = {'id': package.id if package else None, 'name': package.name if package else None, 'exam_id': exam.id if exam else None,
-                     'submitted': student_exam.id if student_exam else None}
-
-        return JsonResponse({'status': 200, 'message': 'data loaded', 'results': exam_data})
-
-    except Exception as e:
-        return JsonResponse(
-            {"status_code": 500, "status": 'Failed', "message": 'Internal server error', "error": str(e)}, status=500)

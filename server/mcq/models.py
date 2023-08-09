@@ -47,18 +47,6 @@ class MCQ(models.Model):
         self.full_clean()
         super().save(*args, **kwargs)
 
-    # def has_valid_options(self):
-    #     option_fields = [
-    #         (self.option_text_1, self.option_img_1),
-    #         (self.option_text_2, self.option_img_2),
-    #         (self.option_text_3, self.option_img_3),
-    #         (self.option_text_4, self.option_img_4),
-    #     ]
-    #
-    #     for option_text, option_img in option_fields:
-    #         if not option_text and not option_img:
-    #             return False
-    #     return True
 
     @property
     def problem_setter_name(self):

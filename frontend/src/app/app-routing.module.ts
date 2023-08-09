@@ -37,18 +37,12 @@ const routes: Routes = [
         canActivate: [authGuard],
         loadChildren: () => import('./coupon/coupon.module').then((m) => m.CouponModule),
       },
-      // {
-      //   path: 'exam',
-      //   component: ExamComponent,
-      // },
-      // {
-      //   path: 'offer',
-      //   component: OfferComponent,
-      // },
-      // {
-      //   path: 'package',
-      //   component: PackageComponent,
-      // },
+      {
+        path: 'question_bank',
+        canActivate: [authGuard],
+        loadChildren: () => import('./question-bank/question-bank.module').then((m) => m.QuestionBankModule),
+      },
+
     ]
   },
   {

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'custom_user',
     'exam_submittion',
+    'question_bank',
     'package',
     'exam',
     'mcq',

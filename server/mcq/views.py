@@ -27,7 +27,7 @@ class MCQView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAP
         queryset = super().get_queryset()
         subject = self.request.query_params.get('subject')
         if subject:
-            print("subject$"+subject)
+            print("subject$" + subject)
             print(queryset)
             queryset = queryset.filter(subject=subject)
             print(queryset)

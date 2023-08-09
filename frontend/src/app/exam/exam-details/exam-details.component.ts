@@ -29,15 +29,7 @@ export class ExamDetailsComponent implements OnInit {
 
   onToggleChange(event: any,key:string) {
     const formData = new FormData();
-    // for (const key in this.examDetails) {
-    //   if (this.examDetails.hasOwnProperty(key)) {
-    //     const value = this.examDetails[key];
-    //     formData.append(key, value);
-    //   }
-    // }
     formData.append(key,event.checked);
-    // formData.delete('mcq_list')
-
     this.examService.updateExam(formData,this.examDetails.id).subscribe({
       next: (response)=>{
         console.log(response)
